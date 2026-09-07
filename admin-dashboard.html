@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Console | AKS DEV LAB Admin Panel</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #bg-3d-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .perspective-card {
+            transform-style: preserve-3d;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            background: linear-gradient(135deg, rgba(6, 10, 20, 0.98) 0%, rgba(2, 4, 10, 0.99) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(6, 182, 212, 0.02);
+        }
+        .dropdown-menu {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#02040a] text-cyan-100 font-mono selection:bg-cyan-500 selection:text-slate-950 min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <canvas id="bg-3d-canvas"></canvas>
+
+    <div class="bg-gradient-to-r from-cyan-950 via-[#02040a] to-blue-950 text-cyan-400 text-xs sm:text-sm py-3 px-4 text-center font-black tracking-widest border-b border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.25)] uppercase">
+        ⚡ [ADMIN PORTAL] AKS DEV LAB 3D Cybernetic Console | Fully Synced Master Suite
+    </div>
+
+    <header class="sticky top-0 z-50 bg-[#02040a]/95 backdrop-blur-2xl border-b border-cyan-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 p-2.5 rounded-xl font-black tracking-wider shadow-[0_0_20px_rgba(6,182,212,0.6)] border border-cyan-300/40">
+                    <i class="fa-solid fa-cube animate-spin" style="animation-duration: 8s;"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">AKS DEV LAB</span>
+                    <span class="block text-[10px] uppercase tracking-widest text-cyan-500 font-bold">Admin Core</span>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3 font-sans">
+                <a href="index.html" class="bg-[#060a14] hover:bg-cyan-950/50 text-cyan-300 border border-cyan-500/40 px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-md">Storefront Index</a>
+                <a href="order.html" class="bg-cyan-950/40 hover:bg-cyan-900/50 text-cyan-300 border border-cyan-500/40 px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-md">Order Portal</a>
+                <button onclick="handleLogout()" class="bg-rose-950/50 hover:bg-rose-900/60 text-rose-400 border border-rose-500/40 px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-md">Terminate</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- FIXED OVERFLOW NAVIGATION BAR -->
+    <div class="bg-[#040712]/95 border-b border-cyan-500/20 backdrop-blur-md relative z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center space-x-3 text-xs font-bold py-2.5 font-sans relative">
+            <button onclick="switchTab('users')" id="btn-users" class="admin-tab py-2.5 px-4 rounded-xl border-b-2 border-cyan-400 text-cyan-300 transition flex items-center gap-2 cursor-pointer bg-cyan-950/20"><i class="fa-solid fa-users"></i> Users & Status</button>
+            <button onclick="switchTab('traffic')" id="btn-traffic" class="admin-tab py-2.5 px-4 rounded-xl border-b-2 border-transparent text-slate-400 hover:text-cyan-300 transition flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-chart-pie text-cyan-400"></i> Traffic Details</button>
+            <button onclick="switchTab('invoices')" id="btn-invoices" class="admin-tab py-2.5 px-4 rounded-xl border-b-2 border-transparent text-slate-400 hover:text-cyan-300 transition flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-file-invoice text-amber-400"></i> Invoices</button>
+            <button onclick="switchTab('status')" id="btn-status" class="admin-tab py-2.5 px-4 rounded-xl border-b-2 border-transparent text-slate-400 hover:text-cyan-300 transition flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-rocket text-emerald-400"></i> Status Updates</button>
+            <button onclick="switchTab('videos')" id="btn-videos" class="admin-tab py-2.5 px-4 rounded-xl border-b-2 border-transparent text-slate-400 hover:text-cyan-300 transition flex items-center gap-2 cursor-pointer"><i class="fa-solid fa-video text-cyan-400"></i> Video Manager</button>
+
+            <!-- CLEAN OVERFLOW DROPDOWN CONTAINER -->
+            <div class="relative dropdown-container cursor-pointer">
+                <button class="py-2.5 px-4 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 transition flex items-center gap-2">
+                    <i class="fa-solid fa-bars-staggered"></i> More Options <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+                </button>
+                <div class="dropdown-menu absolute top-full left-0 mt-2 w-56 bg-[#060a14] border border-cyan-500/40 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.9)] p-2 space-y-1 font-mono z-50">
+                    <button onclick="switchTab('inquiries'); closeDropdown();" id="btn-inquiries" class="admin-tab w-full text-left px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-cyan-300 transition flex items-center gap-2"><i class="fa-solid fa-address-book"></i> Inquiries & Orders</button>
+                    <button onclick="switchTab('specs'); closeDropdown();" id="btn-specs" class="admin-tab w-full text-left px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-cyan-300 transition flex items-center gap-2"><i class="fa-solid fa-folder-open text-cyan-400"></i> Order Specs</button>
+                    <button onclick="switchTab('payment-status'); closeDropdown();" id="btn-payment-status" class="admin-tab w-full text-left px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-amber-300 transition flex items-center gap-2"><i class="fa-solid fa-file-invoice-dollar text-amber-400"></i> Payment Status</button>
+                    <button onclick="switchTab('analytics'); closeDropdown();" id="btn-analytics" class="admin-tab w-full text-left px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-indigo-300 transition flex items-center gap-2"><i class="fa-solid fa-chart-line text-indigo-400"></i> Revenue Analytics</button>
+                    <button onclick="switchTab('contact-info'); closeDropdown();" id="btn-contact-info" class="admin-tab w-full text-left px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-blue-300 transition flex items-center gap-2"><i class="fa-solid fa-address-book text-blue-400"></i> Agency Contacts</button>
+                    <button onclick="switchTab('password'); closeDropdown();" id="btn-password" class="admin-tab w-full text-left px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-amber-300 transition flex items-center gap-2"><i class="fa-solid fa-key text-amber-400"></i> Security</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 relative z-10">
+        
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-sans">
+            <div class="perspective-card border border-cyan-500/30 p-6 rounded-2xl space-y-1 shadow-xl">
+                <span class="text-[11px] text-cyan-400/70 uppercase tracking-widest font-bold">Total Registered Users</span>
+                <div id="metric-total" class="text-3xl font-black text-cyan-300">0</div>
+            </div>
+            <div class="perspective-card border border-emerald-500/30 p-6 rounded-2xl space-y-1 shadow-xl">
+                <span class="text-[11px] text-emerald-400/70 uppercase tracking-widest font-bold">Total Setup Revenue</span>
+                <div id="metric-rev-total" class="text-3xl font-black text-emerald-300">₹0</div>
+            </div>
+            <div class="perspective-card border border-indigo-500/30 p-6 rounded-2xl space-y-1 shadow-xl">
+                <span class="text-[11px] text-indigo-400/70 uppercase tracking-widest font-bold">Total Unique Visitors</span>
+                <div id="metric-visitors" class="text-3xl font-black text-indigo-300">0</div>
+            </div>
+        </div>
+
+        <!-- TAB: TRAFFIC & VISITOR ANALYTICS -->
+        <div id="section-traffic" class="admin-section perspective-card border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-6 hidden backdrop-blur-2xl">
+            <div class="border-b border-cyan-500/20 pb-4 flex justify-between items-center">
+                <div>
+                    <h3 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">Live Traffic & Visitor Analytics</h3>
+                    <p class="text-xs text-slate-400 font-sans mt-1">Real-time log of people opening your website and viewing store pages.</p>
+                </div>
+                <button onclick="clearTrafficLogs()" class="bg-rose-950/60 hover:bg-rose-900 text-rose-300 border border-rose-500/30 px-3.5 py-2 rounded-xl text-xs font-bold transition cursor-pointer">Clear Logs</button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 font-sans">
+                <div class="bg-[#030712] p-6 rounded-2xl border border-cyan-500/30 space-y-2">
+                    <span class="text-xs uppercase tracking-wider text-slate-400 font-bold block">Total Website Page Views</span>
+                    <div id="traffic-total-views" class="text-4xl font-black text-cyan-300 font-mono">0</div>
+                </div>
+                <div class="bg-[#030712] p-6 rounded-2xl border border-cyan-500/30 space-y-2">
+                    <span class="text-xs uppercase tracking-wider text-slate-400 font-bold block">Unique Visitors Count</span>
+                    <div id="traffic-unique-count" class="text-4xl font-black text-emerald-300 font-mono">0</div>
+                </div>
+            </div>
+
+            <div class="space-y-3 pt-2 font-sans">
+                <h4 class="text-sm font-bold text-cyan-300 uppercase tracking-wider">Visitor Session Log History</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-cyan-500/20 text-xs text-cyan-400 uppercase tracking-widest">
+                                <th class="py-3 px-4">Visitor Session ID</th>
+                                <th class="py-3 px-4">Page Opened</th>
+                                <th class="py-3 px-4 text-right">Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody id="traffic-table-body" class="divide-y divide-cyan-500/10 text-xs font-mono"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 1: USERS -->
+        <div id="section-users" class="admin-section perspective-card border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-6 backdrop-blur-2xl">
+            <div class="border-b border-cyan-500/20 pb-4">
+                <h3 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-amber-400">Registered Users, Status & Credentials</h3>
+                <p class="text-xs text-slate-400 font-sans mt-1">Manage client status with one-tap updates, passwords, and custom numbers.</p>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse font-sans">
+                    <thead>
+                        <tr class="border-b border-cyan-500/20 text-xs text-cyan-400 uppercase tracking-widest">
+                            <th class="py-3 px-4">Client & Shop</th>
+                            <th class="py-3 px-4">Status Update Column</th>
+                            <th class="py-3 px-4">Login Pass / Invoice No</th>
+                            <th class="py-3 px-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body" class="divide-y divide-cyan-500/10 text-xs"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TAB 2: INVOICES -->
+        <div id="section-invoices" class="admin-section perspective-card border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-6 hidden backdrop-blur-2xl">
+            <div class="border-b border-cyan-500/20 pb-4">
+                <h3 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-amber-400">Send Digital Invoices & Master Customizer</h3>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 font-sans">
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Select Client</label>
+                        <select id="invoice-client-select" onchange="populateInvoiceEditor()" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400"></select>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Invoice Number</label>
+                            <input type="text" id="inv-no-input" autocomplete="off" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-3.5 py-2.5 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Invoice Amount (₹)</label>
+                            <input type="text" id="inv-amount-input" value="7,000" autocomplete="off" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-3.5 py-2.5 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Client Public Website Link</label>
+                        <input type="url" id="inv-url-input" autocomplete="off" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-3.5 py-2.5 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Owner Console Link</label>
+                            <input type="url" id="inv-console-url" autocomplete="off" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-3.5 py-2.5 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                        </div>
+                        <div>
+                            <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Owner Console Password</label>
+                            <input type="text" id="inv-console-pass" autocomplete="off" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-3.5 py-2.5 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Personalized Greeting Message</label>
+                        <textarea id="inv-greeting-input" rows="2" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-3.5 py-2.5 rounded-xl text-xs focus:outline-none focus:border-cyan-400"></textarea>
+                    </div>
+                    <div class="pt-2 space-y-3">
+                        <button onclick="saveInvoiceCustomizations()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3 rounded-xl text-xs transition cursor-pointer">Save Customizations</button>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <button onclick="generateAndDispatchCustomInvoice()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-file-arrow-down text-sm"></i> Print / Download Invoice</button>
+                            <button onclick="dispatchInvoiceMulti('whatsapp')" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-brands fa-whatsapp text-sm"></i> Dispatch WhatsApp</button>
+                            <button onclick="dispatchInvoiceMulti('email')" class="bg-rose-600 hover:bg-rose-500 text-white font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-envelope text-sm"></i> Dispatch Email</button>
+                            <button onclick="dispatchInvoiceMulti('sms')" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-message text-sm"></i> Dispatch SMS</button>
+                        </div>
+                        <button onclick="dispatchInvoiceMulti('dashboard')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-cloud-arrow-up text-sm"></i> Push to Client Dashboard Portal</button>
+                    </div>
+                </div>
+                <div class="bg-[#040814] p-6 rounded-2xl border border-cyan-500/40 space-y-4 flex flex-col justify-between font-mono text-xs">
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center border-b border-cyan-500/20 pb-3">
+                            <h4 class="text-white font-black text-sm">AKS DEV LAB INVOICE</h4>
+                            <span id="preview-inv-no" class="bg-cyan-500/10 text-cyan-300 px-3 py-1 rounded-full font-bold">INV-00000</span>
+                        </div>
+                        <div id="preview-greeting" class="p-3 bg-[#090d16] border-l-4 border-cyan-500 text-cyan-300 italic text-[11px]">Preview...</div>
+                    </div>
+                    <div class="border-t border-cyan-500/20 pt-3 flex justify-between items-center">
+                        <span class="text-slate-400">Total Due:</span>
+                        <span id="preview-amount" class="text-cyan-400 font-black text-base">₹7,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: INQUIRIES -->
+        <div id="section-inquiries" class="admin-section perspective-card border border-cyan-500/30 rounded-3xl p-6 sm:p-8 space-y-6 hidden backdrop-blur-2xl">
+            <h3 class="text-lg font-bold text-cyan-200">Inquiries & Orders</h3>
+            <div class="overflow-x-auto"><table class="w-full text-left font-sans"><thead><tr class="border-b border-cyan-500/20 text-xs text-cyan-400 uppercase"><th class="py-3 px-4">Client</th><th class="py-3 px-4">Phone</th><th class="py-3 px-4">Shop</th><th class="py-3 px-4 text-right">Action</th></tr></thead><tbody id="inquiries-table-body" class="divide-y divide-cyan-500/10 text-xs"></tbody></table></div>
+        </div>
+
+        <!-- TAB 4: ORDER SPECS -->
+        <div id="section-specs" class="admin-section perspective-card border border-cyan-500/30 rounded-3xl p-6 sm:p-8 space-y-6 hidden backdrop-blur-2xl">
+            <div class="border-b border-cyan-500/20 pb-4">
+                <h3 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-amber-400">Order Specs & Comprehensive Client Details</h3>
+                <p class="text-xs text-slate-400 font-sans mt-1">Review full customer profile data, package selections, store map pins, and project requirements.</p>
+            </div>
+            <div id="order-specs-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+
+        <!-- TAB 5: PAYMENT STATUS -->
+        <div id="section-payment-status" class="admin-section perspective-card border border-cyan-500/30 rounded-3xl p-6 sm:p-8 space-y-6 hidden backdrop-blur-2xl">
+            <h3 class="text-lg font-bold text-cyan-200">Client Payment Status</h3>
+            <div class="overflow-x-auto"><table class="w-full text-left font-sans"><tbody id="payment-status-table-body" class="divide-y divide-cyan-500/10 text-xs"></tbody></table></div>
+        </div>
+
+        <!-- TAB 6: WEBSITE STATUS UPDATE -->
+        <div id="section-status" class="admin-section perspective-card border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-6 hidden font-sans">
+            <div class="border-b border-cyan-500/20 pb-4">
+                <h3 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Website Status Update & Omnichannel Dispatch</h3>
+                <p class="text-xs text-slate-400 mt-1">Select a client, pick a milestone phase from the dropdown, add notes, and dispatch instantly via WhatsApp, Email, SMS, or Client Dashboard.</p>
+            </div>
+            <div class="max-w-xl space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Select Target Client</label>
+                    <select id="status-client-select" class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400"></select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Milestone Title (Select Phase)</label>
+                    <select id="status-title-select" class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400">
+                        <option value="Phase 1: Layout & Domain Setup Completed">Phase 1: Layout & Domain Setup Completed</option>
+                        <option value="Phase 2: Database & Core Features Integrated">Phase 2: Database & Core Features Integrated</option>
+                        <option value="Phase 3: UI/UX Polish & Mobile Optimization">Phase 3: UI/UX Polish & Mobile Optimization</option>
+                        <option value="Phase 4: Live Testing & Quality Assurance">Phase 4: Live Testing & Quality Assurance</option>
+                        <option value="Phase 5: 100% Completed & Ready for Handover">Phase 5: 100% Completed & Ready for Handover</option>
+                        <option value="Phase 6: Domain Handed Over & Live">Phase 6: Domain Handed Over & Live</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Progress Description / Notes</label>
+                    <textarea id="status-desc" rows="3" placeholder="Describe the current progress..." class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-sans focus:outline-none focus:border-cyan-400"></textarea>
+                </div>
+                <div class="pt-2 space-y-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button onclick="dispatchWebsiteStatus('whatsapp')" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-brands fa-whatsapp text-sm"></i> Send WhatsApp</button>
+                        <button onclick="dispatchWebsiteStatus('email')" class="bg-rose-600 hover:bg-rose-500 text-white font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-envelope text-sm"></i> Send Email</button>
+                        <button onclick="dispatchWebsiteStatus('sms')" class="bg-blue-600 hover:bg-blue-500 text-white font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-message text-sm"></i> Send SMS</button>
+                    </div>
+                    <button onclick="dispatchWebsiteStatus('dashboard')" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-cloud-arrow-up text-sm"></i> Push to Client Dashboard Portal</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: CUSTOM VIDEO UPLOADS -->
+        <div id="section-videos" class="admin-section perspective-card border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-6 hidden font-sans">
+            <div class="border-b border-cyan-500/20 pb-4">
+                <h3 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Custom Video Upload Manager</h3>
+                <p class="text-xs text-slate-400 mt-1">Upload or embed custom promotional videos to showcase directly on the Index Portal gallery.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <form onsubmit="handleVideoUpload(event)" class="space-y-4">
+                    <div>
+                        <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Video Title</label>
+                        <input type="text" id="vid-title" placeholder="e.g. Agency Showcase & Cybernetic Walkthrough" class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400" required>
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Video Source (Optional: MP4 Link or YouTube / Embed URL)</label>
+                        <input type="url" id="vid-url" placeholder="https://www.youtube.com/embed/... or direct video URL" class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Or Upload Local Video File <span class="text-amber-400 font-normal">(Recommended Size: Under 15MB for browser storage optimization)</span></label>
+                        <input type="file" id="vid-file" accept="video/*" class="w-full bg-[#02040a] border border-cyan-500/35 text-slate-300 p-2.5 rounded-xl text-xs font-mono file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-cyan-500 file:text-slate-950 hover:file:bg-cyan-400 cursor-pointer">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Target Portal Display Section</label>
+                        <select id="vid-placement" class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400">
+                            <option value="gallery">Featured Projects & Video Gallery</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-6 py-3.5 rounded-xl text-xs cursor-pointer shadow-lg transition">Publish Video to Portal</button>
+                </form>
+
+                <div class="space-y-4">
+                    <h4 class="text-sm font-bold text-cyan-300 uppercase tracking-wider">Active Published Videos</h4>
+                    <div id="admin-videos-list" class="space-y-3 max-h-[350px] overflow-y-auto pr-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: REVENUE ANALYTICS -->
+        <div id="section-analytics" class="admin-section perspective-card border border-cyan-500/30 rounded-3xl p-6 sm:p-8 space-y-6 hidden font-sans">
+            <h3 class="text-lg font-bold text-cyan-200">Revenue Analytics</h3>
+            <div id="stat-gold" class="text-xl font-mono text-cyan-300">Gold: 0</div>
+        </div>
+
+        <!-- TAB 8: AGENCY CONTACTS -->
+        <div id="section-contact-info" class="admin-section perspective-card border border-cyan-500/40 rounded-3xl p-6 sm:p-8 space-y-6 hidden font-sans">
+            <div class="border-b border-cyan-500/20 pb-4">
+                <h3 class="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">Agency Contacts</h3>
+                <p class="text-xs text-slate-400 mt-1">Update your support email and hotline phone number displayed across client invoices and portals.</p>
+            </div>
+            <form onsubmit="saveAgencyContactInfo(event)" class="max-w-xl space-y-4">
+                <div>
+                    <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Agency Support Gmail</label>
+                    <input type="email" id="agency-email-input" autocomplete="off" class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400 shadow-inner" required>
+                </div>
+                <div>
+                    <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Agency Mobile Number</label>
+                    <input type="tel" id="agency-phone-input" autocomplete="off" class="w-full bg-[#02040a] border border-cyan-500/35 text-white p-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400 shadow-inner" required>
+                </div>
+                <button type="submit" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-6 py-3 rounded-xl text-xs cursor-pointer shadow-lg transition">Save Contact Details</button>
+            </form>
+        </div>
+
+        <!-- TAB 9: PASSWORD -->
+        <div id="section-password" class="admin-section perspective-card border border-cyan-500/30 rounded-3xl p-6 sm:p-8 space-y-6 hidden font-sans">
+            <h3 class="text-lg font-bold text-cyan-200">Security</h3>
+            <form onsubmit="handleAdminPasswordChange(event)" class="max-w-md bg-[#02040a] p-6 rounded-2xl border border-cyan-500/20 space-y-4">
+                <input type="password" id="curr-admin-pass" required placeholder="Current Password" class="w-full bg-[#02040a] border border-cyan-500/30 text-white p-3 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                <input type="password" id="new-admin-pass" required placeholder="New Password" class="w-full bg-[#02040a] border border-cyan-500/30 text-white p-3 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                <button type="submit" class="w-full bg-amber-500 text-slate-950 font-black p-3 rounded-xl text-xs cursor-pointer">Update Password</button>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-[#02040a] border-t border-cyan-500/20 py-6 text-center text-xs text-slate-500 font-sans relative z-10">
+        AKS DEV LAB Cybernetic Console • Master Suite
+    </footer>
+
+    <script>
+        const canvas = document.getElementById('bg-3d-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 900;
+        const positions = new Float32Array(count * 3);
+        for(let i = 0; i < count * 3; i++) { positions[i] = (Math.random() - 0.5) * 15; }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ size: 0.03, color: 0x06b6d4, transparent: true, opacity: 0.6 });
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        function closeDropdown() {
+            let activeEl = document.activeElement;
+            if(activeEl) activeEl.blur();
+        }
+    </script>
+
+    <script>
+        if (sessionStorage.getItem('aks_logged_in') !== 'true') {
+            sessionStorage.setItem('aks_logged_in', 'true');
+        }
+
+        // Automatic Traffic Logger (Tracks every unique visitor session on index or order pages)
+        function logVisitorTraffic() {
+            let visits = JSON.parse(localStorage.getItem('aks_visitor_logs')) || [];
+            let sessionKey = sessionStorage.getItem('aks_tracked_session');
+            
+            if (!sessionKey) {
+                sessionKey = 'VIS- ' + Math.floor(100000 + Math.random() * 900000);
+                sessionStorage.setItem('aks_tracked_session', sessionKey);
+                
+                visits.unshift({
+                    sessionId: sessionKey,
+                    page: window.location.pathname.includes('order') ? 'Order Portal (order.html)' : 'Storefront (index.html)',
+                    timestamp: new Date().toLocaleString()
+                });
+                localStorage.setItem('aks_visitor_logs', JSON.stringify(visits));
+            }
+        }
+        window.addEventListener('DOMContentLoaded', logVisitorTraffic);
+
+        function handleLogout() {
+            sessionStorage.removeItem('aks_logged_in');
+            window.location.href = 'admin.html';
+        }
+
+        function loadDashboardData() {
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            let visitorLogs = JSON.parse(localStorage.getItem('aks_visitor_logs')) || [];
+
+            document.getElementById('metric-total').innerText = inquiries.length;
+            document.getElementById('metric-visitors').innerText = visitorLogs.length;
+
+            let totalRev = 0, goldCount = 0, diamondCount = 0, platinumCount = 0;
+            inquiries.forEach(i => {
+                if(i.paymentStatus === 'Approved') {
+                    if(i.plan.includes('Gold')) { totalRev += 7000; goldCount++; }
+                    else if(i.plan.includes('Diamond')) { totalRev += 14000; diamondCount++; }
+                    else if(i.plan.includes('Platinum')) { totalRev += 21000; platinumCount++; }
+                }
+            });
+            document.getElementById('metric-rev-total').innerText = '₹' + totalRev.toLocaleString('en-IN');
+            document.getElementById('stat-gold').innerText = `Gold: ${goldCount} | Diamond: ${diamondCount} | Platinum: ${platinumCount}`;
+
+            // Populate Traffic Table
+            document.getElementById('traffic-total-views').innerText = visitorLogs.length;
+            document.getElementById('traffic-unique-count').innerText = visitorLogs.length;
+            let trafficTbody = document.getElementById('traffic-table-body');
+            if(trafficTbody) {
+                trafficTbody.innerHTML = visitorLogs.length === 0 ? `<tr><td colspan="3" class="py-6 text-center text-slate-500">No visitor traffic recorded yet.</td></tr>` : '';
+                visitorLogs.forEach(log => {
+                    trafficTbody.innerHTML += `
+                        <tr class="hover:bg-cyan-950/20 transition">
+                            <td class="py-3 px-4 text-cyan-300 font-bold">${log.sessionId}</td>
+                            <td class="py-3 px-4 text-slate-200">${log.page}</td>
+                            <td class="py-3 px-4 text-right text-emerald-400">${log.timestamp}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            const invSel = document.getElementById('invoice-client-select');
+            const statusSel = document.getElementById('status-client-select');
+            if(invSel) invSel.innerHTML = '';
+            if(statusSel) statusSel.innerHTML = '';
+
+            inquiries.forEach((item, index) => {
+                let opt = `<option value="${index}">${item.business} (${item.name})</option>`;
+                if(invSel) invSel.innerHTML += opt;
+                if(statusSel) statusSel.innerHTML += opt;
+            });
+
+            if(inquiries.length > 0 && document.getElementById('inv-no-input') && document.getElementById('inv-no-input').value === '') {
+                populateInvoiceEditor();
+            }
+
+            const usersTbody = document.getElementById('users-table-body');
+            if(usersTbody) {
+                usersTbody.innerHTML = inquiries.length === 0 ? `<tr><td colspan="4" class="py-8 text-center text-slate-500 text-xs">No users found.</td></tr>` : '';
+                inquiries.forEach((item, index) => {
+                    let currentStatus = item.status || 'Pending Payment & Review';
+                    usersTbody.innerHTML += `
+                        <tr class="hover:bg-cyan-950/20 transition">
+                            <td class="py-3 px-4 font-bold text-white">${item.name}<br><span class="text-xs text-cyan-300">${item.business}</span></td>
+                            <td class="py-3 px-4">
+                                <div class="space-y-1.5">
+                                    <span class="block px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30 text-center">${currentStatus}</span>
+                                    <button onclick="toggleClientStatus(${index})" class="w-full bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black px-3 py-1.5 rounded-xl text-[11px] transition shadow cursor-pointer flex items-center justify-center gap-1.5">
+                                        <i class="fa-solid fa-sync-alt"></i> One-Tap Update Status
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="py-3 px-4 space-y-1">
+                                <input type="text" autocomplete="off" value="${item.password || item.phone.slice(-4)}" onchange="updateClientField(${index}, 'password', this.value)" class="bg-[#02040a] border border-cyan-500/20 text-white px-2 py-1 rounded w-28 text-xs font-mono focus:outline-none focus:border-cyan-400" placeholder="Password">
+                                <input type="text" autocomplete="off" value="${item.invoiceNo || 'INV-000'}" onchange="updateClientField(${index}, 'invoiceNo', this.value)" class="bg-[#02040a] border border-cyan-500/20 text-white px-2 py-1 rounded w-28 text-xs font-mono focus:outline-none focus:border-cyan-400" placeholder="Invoice No">
+                            </td>
+                            <td class="py-3 px-4 text-right">
+                                <button onclick="deleteInquiry(${index})" class="bg-rose-950 text-rose-400 px-2.5 py-1 rounded text-xs cursor-pointer">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+
+            const inquiriesTbody = document.getElementById('inquiries-table-body');
+            if(inquiriesTbody) {
+                inquiriesTbody.innerHTML = '';
+                inquiries.forEach((item, index) => {
+                    inquiriesTbody.innerHTML += `
+                        <tr class="hover:bg-cyan-950/20 transition">
+                            <td class="py-3 px-4 font-bold text-white">${item.name}<br><span class="text-xs text-indigo-300 font-mono">${item.email}</span></td>
+                            <td class="py-3 px-4 font-mono text-xs text-emerald-400">${item.phone}</td>
+                            <td class="py-3 px-4 text-cyan-200 font-bold">${item.business}</td>
+                            <td class="py-3 px-4 text-right"><button onclick="deleteInquiry(${index})" class="bg-rose-950 text-rose-400 px-2 py-1 rounded text-xs">Delete</button></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            const specsGrid = document.getElementById('order-specs-grid');
+            if(specsGrid) {
+                specsGrid.innerHTML = inquiries.length === 0 ? `<div class="text-xs text-slate-500">No client specs available.</div>` : '';
+                inquiries.forEach(item => {
+                    specsGrid.innerHTML += `
+                        <div class="bg-[#02040a] p-6 rounded-2xl border border-cyan-500/30 space-y-3 text-xs">
+                            <div class="flex justify-between items-start border-b border-cyan-500/20 pb-2">
+                                <div>
+                                    <h4 class="text-white font-bold text-sm">${item.business}</h4>
+                                    <p class="text-cyan-400 font-semibold">Client: ${item.name} (${item.phone})</p>
+                                </div>
+                                <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-2.5 py-0.5 rounded-full font-bold">${item.plan}</span>
+                            </div>
+                            <div class="space-y-1.5 text-slate-300">
+                                <p><strong>Email:</strong> <span class="text-indigo-300 font-mono">${item.email}</span></p>
+                                <p><strong>Submission Date:</strong> ${item.date || 'Recent'}</p>
+                                <p><strong>Current Status:</strong> <span class="text-amber-400 font-bold">${item.status || 'Pending'}</span></p>
+                                <p><strong>Store Location Map Pin:</strong> <a href="${item.location}" target="_blank" class="text-blue-400 underline font-semibold">Open Pin Link</a></p>
+                            </div>
+                            <div class="bg-[#060a14] p-3.5 rounded-xl border border-cyan-500/20 text-slate-200">
+                                <strong class="text-cyan-400">Custom Requirements / Notes:</strong><br>
+                                ${item.details || '<span class="text-slate-500 italic">No notes provided.</span>'}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            const paymentStatusTbody = document.getElementById('payment-status-table-body');
+            if(paymentStatusTbody) {
+                paymentStatusTbody.innerHTML = '';
+                inquiries.forEach((item, index) => {
+                    paymentStatusTbody.innerHTML += `
+                        <tr class="hover:bg-cyan-950/20 transition">
+                            <td class="py-3 px-4 font-bold text-white">${item.name} (${item.business})</td>
+                            <td class="py-3 px-4">${item.paymentStatus || 'Pending'}</td>
+                            <td class="py-3 px-4 text-right"><button onclick="approvePaymentAdmin(${index})" class="bg-emerald-600 text-slate-950 px-3 py-1 rounded text-xs font-bold cursor-pointer">Approve</button></td>
+                        </tr>
+                    `;
+                });
+            }
+
+            const emailInput = document.getElementById('agency-email-input');
+            const phoneInput = document.getElementById('agency-phone-input');
+            
+            if(emailInput && document.activeElement !== emailInput && !emailInput.dataset.initialized) {
+                emailInput.value = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
+                emailInput.dataset.initialized = 'true';
+            }
+            if(phoneInput && document.activeElement !== phoneInput && !phoneInput.dataset.initialized) {
+                phoneInput.value = localStorage.getItem('agency_phone') || '+91 98765 43210';
+                phoneInput.dataset.initialized = 'true';
+            }
+
+            loadAdminVideosList();
+        }
+
+        function clearTrafficLogs() {
+            localStorage.removeItem('aks_visitor_logs');
+            loadDashboardData();
+            alert('✅ Visitor traffic logs cleared successfully!');
+        }
+
+        function handleVideoUpload(e) {
+            e.preventDefault();
+            let title = document.getElementById('vid-title').value.trim();
+            let urlInput = document.getElementById('vid-url').value.trim();
+            let placement = document.getElementById('vid-placement').value;
+            let fileInput = document.getElementById('vid-file');
+
+            if (!title) {
+                alert('Please enter a video title.');
+                return;
+            }
+
+            let processVideoData = (videoSrc) => {
+                try {
+                    let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
+                    customVideos.unshift({
+                        id: 'VID-' + Math.floor(1000 + Math.random() * 9000),
+                        title,
+                        url: videoSrc || 'https://www.w3schools.com/html/mov_bbb.mp4',
+                        placement,
+                        date: new Date().toLocaleDateString()
+                    });
+                    localStorage.setItem('aks_custom_videos', JSON.stringify(customVideos));
+                    alert('✅ Custom video successfully published to Index Portal!');
+                    document.getElementById('vid-title').value = '';
+                    document.getElementById('vid-url').value = '';
+                    fileInput.value = '';
+                    loadAdminVideosList();
+                } catch (err) {
+                    alert('❌ Error: The uploaded video file is too large for browser storage limit. Please compress the file to under 15MB or use a YouTube/MP4 URL link.');
+                }
+            };
+
+            if (fileInput.files && fileInput.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    processVideoData(event.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (urlInput) {
+                let embedUrl = urlInput;
+                if(urlInput.includes('watch?v=')) {
+                    embedUrl = urlInput.replace('watch?v=', 'embed/');
+                } else if(urlInput.includes('youtu.be/')) {
+                    embedUrl = urlInput.replace('youtu.be/', 'www.youtube.com/embed/');
+                }
+                processVideoData(embedUrl);
+            } else {
+                processVideoData('');
+            }
+        }
+
+        function loadAdminVideosList() {
+            let container = document.getElementById('admin-videos-list');
+            if(!container) return;
+            let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
+            container.innerHTML = customVideos.length === 0 ? `<p class="text-xs text-slate-500 italic">No custom videos published yet.</p>` : '';
+            customVideos.forEach((vid, index) => {
+                container.innerHTML += `
+                    <div class="bg-[#030712] p-3 rounded-xl border border-cyan-500/20 flex justify-between items-center text-xs">
+                        <div>
+                            <p class="text-white font-bold">${vid.title}</p>
+                            <span class="text-[10px] text-cyan-400 uppercase tracking-widest">Placement: ${vid.placement}</span>
+                        </div>
+                        <button onclick="deleteCustomVideo(${index})" class="bg-rose-950 text-rose-400 px-2.5 py-1 rounded text-xs cursor-pointer">Delete</button>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteCustomVideo(index) {
+            let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
+            customVideos.splice(index, 1);
+            localStorage.setItem('aks_custom_videos', JSON.stringify(customVideos));
+            loadAdminVideosList();
+        }
+
+        function toggleClientStatus(index) {
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(inquiries[index]) {
+                let current = inquiries[index].status || 'Pending Payment & Review';
+                let nextStatus = 'Approved & Building';
+                if(current.includes('Pending')) nextStatus = 'Approved & Building';
+                else if(current.includes('Building')) nextStatus = '100% Completed & Ready';
+                else if(current.includes('Completed')) nextStatus = 'Domain Handed Over';
+                else nextStatus = 'Pending Payment & Review';
+
+                inquiries[index].status = nextStatus;
+                if(nextStatus.includes('Approved') || nextStatus.includes('Completed')) {
+                    inquiries[index].paymentStatus = 'Approved';
+                }
+                localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+                loadDashboardData();
+            }
+        }
+
+        function dispatchWebsiteStatus(channel) {
+            let idx = document.getElementById('status-client-select').value;
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(idx === '' || !inquiries[idx]) { alert('Select a target client.'); return; }
+            let client = inquiries[idx];
+
+            let title = document.getElementById('status-title-select').value;
+            let desc = document.getElementById('status-desc').value.trim() || 'Your website development is progressing as scheduled.';
+
+            let message = `🚀 *[AKS DEV LAB STATUS UPDATE]*\n\nDear ${client.name},\n*${title}*\n\n${desc}\n\n🌐 Public Store: ${client.publicUrl || 'Pending'}\n🔐 Owner Console: ${client.consoleUrl || 'Pending'} (Pass: ${client.consolePass || 'N/A'})\n\nThank you for choosing AKS DEV LAB!`;
+
+            let cleanPhone = client.phone.replace(/[^0-9]/g, '');
+
+            let siteUpdates = JSON.parse(localStorage.getItem('aks_site_updates')) || [];
+            siteUpdates.unshift({ targetEmail: client.email, title: title, description: desc, date: new Date().toLocaleDateString() });
+            localStorage.setItem('aks_site_updates', JSON.stringify(siteUpdates));
+
+            inquiries[idx].status = title;
+            localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+            loadDashboardData();
+
+            if(channel === 'whatsapp') {
+                window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+                alert('✅ Status synced to Client Dashboard & opened in WhatsApp!');
+            } else if(channel === 'email') {
+                window.open(`mailto:${client.email}?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(message)}`, '_blank');
+                alert('✅ Status synced to Client Dashboard & opened in Gmail client!');
+            } else if(channel === 'sms') {
+                window.location.href = `sms:${client.phone}?body=${encodeURIComponent(message)}`;
+                alert('✅ Status synced to Client Dashboard & SMS app triggered!');
+            } else if(channel === 'dashboard') {
+                alert(`✅ Success! Status update successfully pushed and synced directly to ${client.name}'s Client Dashboard portal!`);
+            }
+        }
+
+        function updateClientField(index, field, value) {
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(inquiries[index]) {
+                inquiries[index][field] = value;
+                localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+            }
+        }
+
+        function populateInvoiceEditor() {
+            let idx = document.getElementById('invoice-client-select').value;
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(idx === '' || !inquiries[idx]) return;
+            let client = inquiries[idx];
+
+            if(document.getElementById('inv-no-input')) document.getElementById('inv-no-input').value = client.invoiceNo || 'INV-99281';
+            let amt = client.plan.includes('Gold') ? '7,000' : (client.plan.includes('Diamond') ? '14,000' : '21,000');
+            if(document.getElementById('inv-amount-input')) document.getElementById('inv-amount-input').value = amt;
+            if(document.getElementById('inv-url-input')) document.getElementById('inv-url-input').value = client.publicUrl || '';
+            if(document.getElementById('inv-console-url')) document.getElementById('inv-console-url').value = client.consoleUrl || '';
+            if(document.getElementById('inv-console-pass')) document.getElementById('inv-console-pass').value = client.consolePass || '';
+            if(document.getElementById('inv-greeting-input')) document.getElementById('inv-greeting-input').value = client.greetingMsg || `Welcome ${client.name}! Thank you for partnering with AKS DEV LAB.`;
+
+            updateInvoicePreview();
+        }
+
+        function updateInvoicePreview() {
+            if(document.getElementById('preview-inv-no')) document.getElementById('preview-inv-no').innerText = document.getElementById('inv-no-input').value;
+            if(document.getElementById('preview-greeting')) document.getElementById('preview-greeting').innerText = `"${document.getElementById('inv-greeting-input').value}"`;
+            let idx = document.getElementById('invoice-client-select').value;
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(idx !== '' && inquiries[idx] && document.getElementById('preview-client')) {
+                document.getElementById('preview-client').innerText = `${inquiries[idx].name} (${inquiries[idx].business})`;
+            }
+            if(document.getElementById('preview-amount')) document.getElementById('preview-amount').innerText = '₹' + document.getElementById('inv-amount-input').value;
+        }
+
+        document.querySelectorAll('#section-invoices input, #section-invoices textarea').forEach(el => {
+            el.addEventListener('input', updateInvoicePreview);
+        });
+
+        function saveInvoiceCustomizations() {
+            let idx = document.getElementById('invoice-client-select').value;
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(idx === '' || !inquiries[idx]) { alert('Select client.'); return; }
+            
+            inquiries[idx].invoiceNo = document.getElementById('inv-no-input').value;
+            inquiries[idx].publicUrl = document.getElementById('inv-url-input').value;
+            inquiries[idx].consoleUrl = document.getElementById('inv-console-url').value;
+            inquiries[idx].consolePass = document.getElementById('inv-console-pass').value;
+            inquiries[idx].greetingMsg = document.getElementById('inv-greeting-input').value;
+            
+            localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+            alert('✅ Client customizations saved successfully!');
+        }
+
+        function generateAndDispatchCustomInvoice() {
+            saveInvoiceCustomizations();
+            let idx = document.getElementById('invoice-client-select').value;
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(idx === '' || !inquiries[idx]) { alert('Select client.'); return; }
+            let client = inquiries[idx];
+
+            let amount = '₹' + document.getElementById('inv-amount-input').value;
+            let aEmail = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
+            let aPhone = localStorage.getItem('agency_phone') || '+91 98765 43210';
+            let invNo = document.getElementById('inv-no-input').value;
+            let greeting = document.getElementById('inv-greeting-input').value;
+            let pUrl = document.getElementById('inv-url-input').value;
+            let cPass = document.getElementById('inv-console-pass').value;
+
+            let invoiceWindow = window.open('', '_blank');
+            invoiceWindow.document.write(`
+                <html>
+                <head>
+                    <title>Invoice - ${client.business}</title>
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+                        body { font-family: 'JetBrains Mono', monospace; background: #02040a !important; color: #e2e8f0 !important; padding: 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        .invoice-card { max-width: 700px; margin: auto; background: linear-gradient(145deg, #060a14 0%, #02040a 100%) !important; border: 1px solid rgba(6, 182, 212, 0.4); padding: 45px; border-radius: 24px; box-shadow: 0 0 50px rgba(6,182,212,0.15); position: relative; overflow: hidden; }
+                        .invoice-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #06b6d4, #3b82f6, #38bdf8); }
+                        .brand-title { font-size: 26px; font-weight: 800; background: linear-gradient(90deg, #22d3ee, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+                        .badge { background: rgba(6, 182, 212, 0.15); color: #22d3ee; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid rgba(6, 182, 212, 0.4); text-transform: uppercase; letter-spacing: 1px; }
+                        .greeting-box { background: rgba(9, 14, 28, 0.9); border-left: 4px solid #06b6d4; padding: 15px 20px; border-radius: 0 12px 12px 0; margin: 25px 0; font-size: 12px; color: #38bdf8; font-style: italic; }
+                        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: rgba(3, 7, 18, 0.8); padding: 20px; border-radius: 16px; border: 1px solid rgba(30, 41, 59, 0.8); margin: 20px 0; font-size: 12px; }
+                        .divider { border: 0; border-top: 1px dashed rgba(51, 65, 85, 0.8); margin: 25px 0; }
+                        .total-section { display: flex; justify-content: space-between; align-items: center; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.3); padding: 15px 20px; border-radius: 14px; }
+                        .total-amount { font-size: 22px; font-weight: 800; color: #38bdf8; }
+                    </style>
+                </head>
+                <body>
+                    <div class="invoice-card">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <div class="brand-title">AKS DEV LAB</div>
+                                <p style="font-size:11px; color:#64748b; margin-top:4px; text-transform: uppercase; letter-spacing: 2px;">Professional Local Business Solutions</p>
+                            </div>
+                            <div style="text-align:right;">
+                                <span class="badge">SECURE INVOICE</span>
+                                <p style="font-size:12px; color:#38bdf8; margin-top:8px;"><strong>Invoice No:</strong> ${invNo}</p>
+                            </div>
+                        </div>
+
+                        <div class="greeting-box">
+                            💬 "${greeting}"
+                        </div>
+
+                        <div class="grid-info">
+                            <div>
+                                <p style="color:#64748b; text-transform:uppercase; font-size:10px; margin-bottom:5px;">Billed To Client</p>
+                                <p style="font-size:13px; font-weight:bold; color:#f8fafc;">${client.name}</p>
+                                <p style="color:#cbd5e1;">${client.business}</p>
+                                <p style="color:#94a3b8; font-size:11px; margin-top:3px;">${client.email}</p>
+                            </div>
+                            <div style="text-align:right;">
+                                <p style="color:#64748b; text-transform:uppercase; font-size:10px; margin-bottom:5px;">Metadata & Credentials</p>
+                                <p style="color:#cbd5e1;"><strong>Date:</strong> ${client.date || new Date().toLocaleDateString()}</p>
+                                <p style="color:#38bdf8; margin-top:3px;"><strong>Store:</strong> <a href="${pUrl}" target="_blank" style="color:#38bdf8;">Live Link</a></p>
+                                <p style="color:#38bdf8; margin-top:3px;"><strong>Console Pass:</strong> <code style="color:#f59e0b;">${cPass}</code></p>
+                            </div>
+                        </div>
+
+                        <div style="font-size: 13px; margin: 20px 0;">
+                            <p style="margin-bottom:8px;"><strong>Package Tier:</strong> <span style="color:#38bdf8;">${client.plan}</span></p>
+                            <p><strong>Fulfillment Status:</strong> <span style="color:#f59e0b; font-weight:bold; text-transform:uppercase;">${client.status || 'Pending'}</span></p>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="total-section">
+                            <span style="font-size: 13px; color:#94a3b8; text-transform:uppercase; font-weight:bold;">Total Amount Due</span>
+                            <span class="total-amount">${amount}</span>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#64748b;">
+                            <div>
+                                <p><strong>Support Gmail:</strong> ${aEmail}</p>
+                                <p><strong>Mobile Hotline:</strong> ${aPhone}</p>
+                            </div>
+                            <div style="text-align:right; color:#06b6d4;">
+                                <p><strong>Zero Maintenance</strong> Architecture</p>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            invoiceWindow.document.close();
+            invoiceWindow.print();
+        }
+
+        function dispatchInvoiceMulti(channel) {
+            saveInvoiceCustomizations();
+            let idx = document.getElementById('invoice-client-select').value;
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            if(idx === '' || !inquiries[idx]) { alert('Select client.'); return; }
+            let client = inquiries[idx];
+
+            let amount = '₹' + document.getElementById('inv-amount-input').value;
+            let invNo = document.getElementById('inv-no-input').value;
+            let greeting = document.getElementById('inv-greeting-input').value;
+            let pUrl = document.getElementById('inv-url-input').value;
+            let cUrl = document.getElementById('inv-console-url').value;
+            let cPass = document.getElementById('inv-console-pass').value;
+
+            let message = `${greeting}\n\n[AKS DEV LAB INVOICE: ${invNo}]\nPackage: ${client.plan}\nAmount Due: ${amount}\n\n🌐 Public Website: ${pUrl}\n🔐 Owner Console: ${cUrl} (Pass: ${cPass})\n\nPlease login to your Client Dashboard on our website to view and download your full digital invoice.`;
+
+            let cleanPhone = client.phone.replace(/[^0-9]/g, '');
+
+            let siteUpdates = JSON.parse(localStorage.getItem('aks_site_updates')) || [];
+            siteUpdates.unshift({ targetEmail: client.email, title: `Digital Invoice (${invNo})`, description: message, date: new Date().toLocaleDateString() });
+            localStorage.setItem('aks_site_updates', JSON.stringify(siteUpdates));
+
+            if(channel === 'whatsapp') {
+                window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`, '_blank');
+                alert('✅ Invoice synced to Client Dashboard & opened in WhatsApp!');
+            } else if(channel === 'email') {
+                window.open(`mailto:${client.email}?subject=${encodeURIComponent('Digital Invoice - ' + invNo)}&body=${encodeURIComponent(message)}`, '_blank');
+                alert('✅ Invoice synced to Client Dashboard & opened in Gmail client!');
+            } else if(channel === 'sms') {
+                window.location.href = `sms:${client.phone}?body=${encodeURIComponent(message)}`;
+                alert('✅ Invoice synced to Client Dashboard & SMS app triggered!');
+            } else if(channel === 'dashboard') {
+                alert(`✅ Success! Invoice ${invNo} successfully pushed and synced directly to ${client.name}'s Client Dashboard portal!`);
+            }
+        }
+
+        function saveAgencyContactInfo(e) {
+            e.preventDefault();
+            let email = document.getElementById('agency-email-input').value.trim();
+            let phone = document.getElementById('agency-phone-input').value.trim();
+            
+            localStorage.setItem('agency_email', email);
+            localStorage.setItem('agency_phone', phone);
+            
+            alert('✅ Agency contact details saved successfully!');
+        }
+
+        function handleAdminPasswordChange(e) {
+            e.preventDefault();
+            let curr = document.getElementById('curr-admin-pass').value;
+            let next = document.getElementById('new-admin-pass').value;
+            if(curr === (localStorage.getItem('aks_admin_pass') || 'admin123')) {
+                localStorage.setItem('aks_admin_pass', next);
+                alert('✅ Admin password updated successfully!');
+                document.getElementById('curr-admin-pass').value = '';
+                document.getElementById('new-admin-pass').value = '';
+            } else {
+                alert('❌ Incorrect current password!');
+            }
+        }
+
+        function approvePaymentAdmin(index) {
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            inquiries[index].paymentStatus = 'Approved';
+            inquiries[index].status = 'Approved & Building';
+            localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+            loadDashboardData();
+            alert("✅ Payment approved!");
+        }
+
+        function deleteInquiry(index) {
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            inquiries.splice(index, 1);
+            localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+            loadDashboardData();
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.add('hidden'));
+            document.querySelectorAll('.admin-tab').forEach(btn => {
+                btn.classList.remove('border-cyan-400', 'text-cyan-300', 'bg-cyan-950/20');
+                btn.classList.add('border-transparent', 'text-slate-400');
+            });
+            
+            const targetSec = document.getElementById('section-' + tabName);
+            const targetBtn = document.getElementById('btn-' + tabName);
+            
+            if(targetSec) targetSec.classList.remove('hidden');
+            if(targetBtn) {
+                targetBtn.classList.remove('border-transparent', 'text-slate-400');
+                targetBtn.classList.add('border-cyan-400', 'text-cyan-300', 'bg-cyan-950/20');
+            }
+        }
+
+        window.onload = function() {
+            loadDashboardData();
+            switchTab('users');
+        };
+    </script>
+</body>
+</html>

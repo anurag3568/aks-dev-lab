@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKS DEV LAB | Portal 4 - Client Workflow</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #bg-3d-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .cyber-card {
+            background: linear-gradient(135deg, rgba(6, 18, 38, 0.95) 0%, rgba(2, 6, 18, 0.98) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.35);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(99, 102, 241, 0.03);
+        }
+        .dropdown-menu {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#02040a] text-cyan-100 font-mono relative overflow-x-hidden min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
+
+    <canvas id="bg-3d-canvas"></canvas>
+
+    <!-- TOP TICKER -->
+    <div class="bg-gradient-to-r from-indigo-950 via-slate-950 to-blue-950 text-indigo-400 text-xs py-2.5 px-4 text-center font-black tracking-widest border-b border-indigo-500/40 shadow-[0_0_20px_rgba(99,102,241,0.3)] uppercase relative z-20">
+        ⚡ [CLIENT WORKFLOW PORTAL] End-to-End Automation & Operational Lifecycle
+    </div>
+
+    <!-- NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 bg-[#02040a]/90 backdrop-blur-2xl border-b border-cyan-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <div class="flex items-center space-x-3 shrink-0">
+                <div class="bg-gradient-to-tr from-indigo-500 to-blue-600 text-slate-950 p-2.5 rounded-xl font-black tracking-wider shadow-[0_0_20px_rgba(99,102,241,0.6)] border border-indigo-300/40 animate-pulse">
+                    <i class="fa-solid fa-cube animate-spin" style="animation-duration: 8s;"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400 leading-tight block">AKS DEV LAB</span>
+                    <span class="block text-[9px] uppercase tracking-widest text-indigo-500 font-bold">Workflow Hub</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-300 font-sans">
+                <a href="index.html" class="hover:text-cyan-400 transition">Storefront</a>
+                
+                <div class="relative dropdown-container py-4 cursor-pointer">
+                    <span class="text-indigo-400 font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-open"></i> Service Portals <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+                    </span>
+                    <div class="dropdown-menu absolute top-full left-0 w-64 bg-[#060a14] border border-cyan-500/40 rounded-2xl shadow-2xl p-2 space-y-1 font-mono">
+                        <a href="service-architecture.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-cyan-300 transition">System Architecture</a>
+                        <a href="service-packages.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-amber-300 transition">Service Packages</a>
+                        <a href="service-media.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-emerald-300 transition">Video Media Manager</a>
+                        <a href="service-workflow.html" class="block px-4 py-2.5 rounded-xl text-xs text-indigo-300 bg-indigo-950/40 font-bold transition">Client Workflow</a>
+                        <a href="service-security.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-rose-300 transition">Security & Roadmap</a>
+                    </div>
+                </div>
+
+                <a href="projects.html" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Projects Grid</a>
+            </nav>
+
+            <div class="flex items-center gap-3 shrink-0 font-sans">
+                <a href="index.html#contact" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black px-4 py-2.5 rounded-xl text-xs transition shadow-lg">Order Platform</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN COMPREHENSIVE WORKFLOW CONTENT -->
+    <main class="flex-grow max-w-5xl mx-auto px-4 py-16 space-y-12 relative z-10 font-sans">
+        
+        <!-- HEADER INTRO BLOCK -->
+        <div class="cyber-card p-8 sm:p-12 rounded-3xl space-y-6 shadow-2xl">
+            <span class="text-indigo-400 font-mono text-xs uppercase bg-indigo-500/10 border border-indigo-500/30 px-3.5 py-1 rounded-full tracking-widest">Portal 4 of 5 • Operational Automation</span>
+            <h1 class="text-3xl sm:text-5xl font-black text-white font-sans tracking-tight">End-to-End Digital Automation & Client Lifecycle</h1>
+            <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
+                The AKS DEV LAB ecosystem is engineered to eliminate friction between initial order placement and final website deployment. By combining automated profile registration with secure payment gateways like Razorpay, clients transition from initial inquiry to active development seamlessly without administrative delays.
+            </p>
+        </div>
+
+        <!-- SECTION 1: 4-STEP LIFECYCLE -->
+        <div class="cyber-card p-8 rounded-3xl space-y-6">
+            <h3 class="text-xl font-black text-white font-mono flex items-center gap-2"><i class="fa-solid fa-route text-indigo-400"></i> Step-by-Step Operational Lifecycle</h3>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                <div class="bg-[#02040a] p-6 rounded-2xl border border-indigo-500/20 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-indigo-500/20 text-indigo-400 font-mono font-black text-base px-3 py-1 rounded-xl border border-indigo-500/30">01</span>
+                        <h4 class="text-white font-bold text-sm">Automated Onboarding</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Clients submit store specifications, map pins, and package selections via the storefront order form. This instantly provisions secure client profiles and generates isolated password PINs (`phone.slice(-4)`).</p>
+                </div>
+
+                <div class="bg-[#02040a] p-6 rounded-2xl border border-indigo-500/20 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-indigo-500/20 text-indigo-400 font-mono font-black text-base px-3 py-1 rounded-xl border border-indigo-500/30">02</span>
+                        <h4 class="text-white font-bold text-sm">Secure Verification & Payment</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Clients log into their private dashboard portals to review order terms, clear setup fees via integrated Razorpay gateways, and download cyber-blue formatted digital invoices instantly.</p>
+                </div>
+
+                <div class="bg-[#02040a] p-6 rounded-2xl border border-indigo-500/20 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-indigo-500/20 text-indigo-400 font-mono font-black text-base px-3 py-1 rounded-xl border border-indigo-500/30">03</span>
+                        <h4 class="text-white font-bold text-sm">Milestone Tracking & Dispatch</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Administrators provide continuous progress transparency, pushing live milestone phase updates and status cards directly into the client's live notification feed and omnichannel channels.</p>
+                </div>
+
+                <div class="bg-[#02040a] p-6 rounded-2xl border border-indigo-500/20 space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="bg-indigo-500/20 text-indigo-400 font-mono font-black text-base px-3 py-1 rounded-xl border border-indigo-500/30">04</span>
+                        <h4 class="text-white font-bold text-sm">Final Domain Handover</h4>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">Upon completion, full domain control, admin console access, and zero-maintenance operational files are successfully transferred directly to the business owner.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: OMNICHANNEL DISPATCH -->
+        <div class="cyber-card p-8 rounded-3xl space-y-4">
+            <h3 class="text-xl font-black text-white font-mono flex items-center gap-2"><i class="fa-solid fa-satellite-dish text-cyan-400"></i> Omnichannel Communication Pipeline</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                The administrator console includes an integrated multi-channel dispatch suite allowing instant communication across:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs">
+                <div class="bg-[#02040a] p-4 rounded-xl border border-indigo-500/20 text-center space-y-1">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-lg mb-1"></i>
+                    <strong class="text-white block">WhatsApp Direct</strong>
+                    <span class="text-slate-400 text-[11px]">Instant pre-formatted chat links</span>
+                </div>
+                <div class="bg-[#02040a] p-4 rounded-xl border border-indigo-500/20 text-center space-y-1">
+                    <i class="fa-solid fa-envelope text-rose-400 text-lg mb-1"></i>
+                    <strong class="text-white block">Email Protocol</strong>
+                    <span class="text-slate-400 text-[11px]">Direct client mail client triggers</span>
+                </div>
+                <div class="bg-[#02040a] p-4 rounded-xl border border-indigo-500/20 text-center space-y-1">
+                    <i class="fa-solid fa-message text-blue-400 text-lg mb-1"></i>
+                    <strong class="text-white block">SMS & Dashboard</strong>
+                    <span class="text-slate-400 text-[11px]">Native device messaging & sync</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION FOOTER BUTTONS -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 border-t border-cyan-500/20">
+            <a href="service-media.html" class="text-xs text-slate-400 hover:text-cyan-300 transition"><i class="fa-solid fa-arrow-left mr-2"></i> Previous: Video Media Manager</a>
+            <a href="service-security.html" class="bg-indigo-600 hover:bg-indigo-500 text-white font-black px-6 py-3 rounded-xl text-xs transition shadow-lg">Next: Security & Roadmap <i class="fa-solid fa-arrow-right ml-2"></i></a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#02040a] border-t border-cyan-500/20 py-8 text-center text-xs text-slate-500 font-sans relative z-10 mt-12">
+        AKS DEV LAB • Professional Local Business Solutions & Client Workflow
+    </footer>
+
+    <!-- 3D THREE.JS BACKGROUND -->
+    <script>
+        const canvas = document.getElementById('bg-3d-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 1500;
+        const positions = new Float32Array(count * 3);
+        for(let i = 0; i < count * 3; i++) { positions[i] = (Math.random() - 0.5) * 18; }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ size: 0.035, color: 0x6366f1, transparent: true, opacity: 0.75 });
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

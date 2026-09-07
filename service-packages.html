@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKS DEV LAB | Portal 2 - Service Packages</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #bg-3d-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .cyber-card {
+            background: linear-gradient(135deg, rgba(6, 18, 38, 0.95) 0%, rgba(2, 6, 18, 0.98) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(245, 158, 11, 0.03);
+        }
+        .dropdown-menu {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#02040a] text-cyan-100 font-mono relative overflow-x-hidden min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
+
+    <canvas id="bg-3d-canvas"></canvas>
+
+    <!-- TOP TICKER -->
+    <div class="bg-gradient-to-r from-amber-950 via-slate-950 to-blue-950 text-amber-400 text-xs py-2.5 px-4 text-center font-black tracking-widest border-b border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.3)] uppercase relative z-20">
+        ⚡ [SERVICE PACKAGES PORTAL] Comprehensive Enterprise Tiers & Investment Structure
+    </div>
+
+    <!-- NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 bg-[#02040a]/90 backdrop-blur-2xl border-b border-cyan-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <div class="flex items-center space-x-3 shrink-0">
+                <div class="bg-gradient-to-tr from-amber-500 to-yellow-600 text-slate-950 p-2.5 rounded-xl font-black tracking-wider shadow-[0_0_20px_rgba(245,158,11,0.6)] border border-amber-300/40 animate-pulse">
+                    <i class="fa-solid fa-cube animate-spin" style="animation-duration: 8s;"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-400 leading-tight block">AKS DEV LAB</span>
+                    <span class="block text-[9px] uppercase tracking-widest text-amber-500 font-bold">Packages Hub</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-300 font-sans">
+                <a href="index.html" class="hover:text-cyan-400 transition">Storefront</a>
+                
+                <div class="relative dropdown-container py-4 cursor-pointer">
+                    <span class="text-amber-400 font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-open"></i> Service Portals <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+                    </span>
+                    <div class="dropdown-menu absolute top-full left-0 w-64 bg-[#060a14] border border-cyan-500/40 rounded-2xl shadow-2xl p-2 space-y-1 font-mono">
+                        <a href="service-architecture.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-cyan-300 transition">System Architecture</a>
+                        <a href="service-packages.html" class="block px-4 py-2.5 rounded-xl text-xs text-amber-300 bg-amber-950/40 font-bold transition">Service Packages</a>
+                        <a href="service-media.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-emerald-300 transition">Video Media Manager</a>
+                        <a href="service-workflow.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-indigo-300 transition">Client Workflow</a>
+                        <a href="service-security.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-rose-300 transition">Security & Roadmap</a>
+                    </div>
+                </div>
+
+                <a href="projects.html" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Projects Grid</a>
+            </nav>
+
+            <div class="flex items-center gap-3 shrink-0 font-sans">
+                <a href="index.html#contact" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2.5 rounded-xl text-xs transition shadow-lg">Order Platform</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN COMPREHENSIVE PACKAGES CONTENT -->
+    <main class="flex-grow max-w-5xl mx-auto px-4 py-16 space-y-12 relative z-10 font-sans">
+        
+        <!-- HEADER INTRO BLOCK -->
+        <div class="cyber-card p-8 sm:p-12 rounded-3xl space-y-6 shadow-2xl">
+            <span class="text-amber-400 font-mono text-xs uppercase bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full tracking-widest">Portal 2 of 5 • Service Deliverables</span>
+            <h1 class="text-3xl sm:text-5xl font-black text-white font-sans tracking-tight">Comprehensive Service Packages & Enterprise Tier Breakdown</h1>
+            <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
+                AKS DEV LAB eliminates recurring subscription fees and hidden retainer costs by providing a comprehensive, one-time setup model. Every tier is engineered to equip local businesses and enterprises with an autonomous digital presence, dedicated domain structures, and dedicated administrative control consoles.
+            </p>
+        </div>
+
+        <!-- SECTION 1: COMPARISON TABLE -->
+        <div class="cyber-card p-8 rounded-3xl space-y-6">
+            <h3 class="text-xl font-black text-white font-mono flex items-center gap-2"><i class="fa-solid fa-layer-group text-amber-400"></i> Detailed Package Tier Specifications</h3>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse font-sans">
+                    <thead>
+                        <tr class="border-b border-amber-500/30 text-xs text-amber-400 uppercase tracking-widest bg-[#02040a]/80">
+                            <th class="py-4 px-4">Package Tier</th>
+                            <th class="py-4 px-4">Financial Investment</th>
+                            <th class="py-4 px-4">Deployment Timeline</th>
+                            <th class="py-4 px-4">Core Architectural Deliverables</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-amber-500/10 text-xs text-slate-300">
+                        <tr>
+                            <td class="py-4 px-4 font-bold text-white">Gold Package</td>
+                            <td class="py-4 px-4 font-mono text-cyan-300 font-bold text-sm">₹7,000</td>
+                            <td class="py-4 px-4">7 – 10 Days</td>
+                            <td class="py-4 px-4 leading-relaxed">• Custom Shop Domain Setup<br>• 2 Pages Professional Website Architecture<br>• Separate Isolated Owner Console<br>• Basic Mobile Optimization & UI Polish</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 font-bold text-amber-400">Diamond Package</td>
+                            <td class="py-4 px-4 font-mono text-amber-300 font-bold text-sm">₹14,000</td>
+                            <td class="py-4 px-4">10 – 15 Days</td>
+                            <td class="py-4 px-4 leading-relaxed">• Custom Shop Domain & DNS Configuration<br>• 3 Pages Dynamic Web Platform<br>• Advanced Owner Console Customization<br>• Integrated Razorpay Payment Gateway Support</td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 font-bold text-blue-400">Platinum Package</td>
+                            <td class="py-4 px-4 font-mono text-blue-300 font-bold text-sm">₹21,000</td>
+                            <td class="py-4 px-4">15 – 20 Days</td>
+                            <td class="py-4 px-4 leading-relaxed">• Custom Domain & Enterprise Hosting Setup<br>• 4–5 Pages Fully Featured E-Commerce Suite<br>• Advanced Owner Console with Catalog Manager<br>• Multi-Channel Omnichannel Dispatch Suite</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 2: CLIENT AUTONOMY -->
+        <div class="cyber-card p-8 rounded-3xl space-y-4">
+            <h3 class="text-xl font-black text-white font-mono flex items-center gap-2"><i class="fa-solid fa-shield-halved text-cyan-400"></i> Ongoing Benefits & Client Autonomy</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs">
+                <div class="bg-[#02040a] p-5 rounded-2xl border border-amber-500/20 space-y-2">
+                    <strong class="text-amber-400 font-mono block text-sm">Zero Recurring Fees</strong>
+                    <p class="text-slate-400">Clients own their digital assets outright upon handover, eliminating ongoing software-as-a-service (SaaS) platform lock-in.</p>
+                </div>
+                <div class="bg-[#02040a] p-5 rounded-2xl border border-amber-500/20 space-y-2">
+                    <strong class="text-cyan-400 font-mono block text-sm">Instant Scalability</strong>
+                    <p class="text-slate-400">Upgrades between tiers can be seamlessly integrated into the existing browser <code class="text-cyan-300">localStorage</code> persistence layer without interrupting live customer traffic.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVIGATION FOOTER BUTTONS -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 border-t border-cyan-500/20">
+            <a href="service-architecture.html" class="text-xs text-slate-400 hover:text-cyan-300 transition"><i class="fa-solid fa-arrow-left mr-2"></i> Previous: System Architecture</a>
+            <a href="service-media.html" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-6 py-3 rounded-xl text-xs transition shadow-lg">Next: Video Media Manager <i class="fa-solid fa-arrow-right ml-2"></i></a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#02040a] border-t border-cyan-500/20 py-8 text-center text-xs text-slate-500 font-sans relative z-10 mt-12">
+        AKS DEV LAB • Professional Local Business Solutions & Service Packages
+    </footer>
+
+    <!-- 3D THREE.JS BACKGROUND -->
+    <script>
+        const canvas = document.getElementById('bg-3d-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 1500;
+        const positions = new Float32Array(count * 3);
+        for(let i = 0; i < count * 3; i++) { positions[i] = (Math.random() - 0.5) * 18; }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ size: 0.035, color: 0xf59e0b, transparent: true, opacity: 0.75 });
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

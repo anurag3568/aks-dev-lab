@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Projects Showcase | AKS DEV LAB</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Three.js for 3D Interactive Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #bg-3d-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .perspective-card {
+            transform-style: preserve-3d;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease;
+        }
+        .perspective-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+            box-shadow: 0 25px 50px rgba(6, 182, 212, 0.3);
+            border-color: rgba(6, 182, 212, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-[#030712] text-cyan-100 font-mono selection:bg-cyan-500 selection:text-slate-950 min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- 3D Interactive Three.js Canvas Container -->
+    <canvas id="bg-3d-canvas"></canvas>
+
+    <header class="sticky top-0 z-50 bg-[#030712]/80 backdrop-blur-2xl border-b border-cyan-500/20 shadow-[0_4px_30px_rgba(0,0,0,0.8)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 p-2.5 rounded-xl font-black shadow-[0_0_15px_rgba(6,182,212,0.5)] border border-cyan-300/40">
+                        <i class="fa-solid fa-cube animate-spin" style="animation-duration: 8s;"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 block">AKS DEV LAB</span>
+                        <span class="block text-[10px] uppercase tracking-widest text-cyan-500 font-bold">3D Cybernetic Showcase</span>
+                    </div>
+                </a>
+            </div>
+            <div class="flex items-center space-x-4 text-xs font-bold font-sans">
+                <a href="index.html" class="bg-[#0b0f19] hover:bg-cyan-950/50 text-cyan-200 border border-cyan-500/30 px-4 py-2.5 rounded-xl transition shadow-[0_0_10px_rgba(6,182,212,0.1)]">
+                    &larr; Back to Home
+                </a>
+                <a href="index.html#contact" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-4 py-2.5 rounded-xl shadow-[0_0_15px_rgba(6,182,212,0.3)] transition">
+                    Order Your Site
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12 relative z-10">
+        <div class="text-center max-w-3xl mx-auto space-y-3 font-sans">
+            <span class="text-emerald-400 font-extrabold text-xs uppercase tracking-widest bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-1 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.2)]">3D Immersive Portfolio</span>
+            <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight">Our Completed Client Websites</h1>
+            <p class="text-slate-400 text-sm sm:text-base">
+                Explore our dynamic portfolio of delivered 0% commission retail storefronts with 3D perspective depth.
+            </p>
+        </div>
+
+        <div class="flex justify-center gap-2 flex-wrap text-xs font-sans">
+            <button onclick="renderProjectGallery('all')" class="bg-[#0b0f19] hover:bg-cyan-950 text-cyan-200 border border-cyan-500/30 px-4 py-2.5 rounded-xl font-bold transition shadow-[0_0_10px_rgba(6,182,212,0.1)]">All Stores</button>
+            <button onclick="renderProjectGallery('Apparel')" class="bg-[#0b0f19] hover:bg-cyan-950 text-slate-400 hover:text-cyan-200 border border-cyan-500/20 px-4 py-2.5 rounded-xl font-bold transition">Fashion & Apparel</button>
+            <button onclick="renderProjectGallery('Electronics')" class="bg-[#0b0f19] hover:bg-cyan-950 text-slate-400 hover:text-cyan-200 border border-cyan-500/20 px-4 py-2.5 rounded-xl font-bold transition">Electronics</button>
+        </div>
+
+        <div id="full-projects-gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    </main>
+
+    <footer class="bg-[#030712] border-t border-cyan-500/20 py-8 text-center text-xs text-slate-500 relative z-10 font-sans">
+        AKS DEV LAB • 3D Portfolio Showcase & Client Gallery
+    </footer>
+
+    <!-- 3D Three.js Background Engine Initialization -->
+    <script>
+        const canvas = document.getElementById('bg-3d-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 1000;
+        const positions = new Float32Array(count * 3);
+
+        for(let i = 0; i < count * 3; i++) {
+            positions[i] = (Math.random() - 0.5) * 15;
+        }
+
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ size: 0.03, color: 0x3b82f6, transparent: true, opacity: 0.6 });
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+
+        camera.position.z = 5;
+
+        let mouseX = 0;
+        let mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
+        });
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.0015 + (mouseX * 0.03);
+            particlesMesh.rotation.x += 0.0008 + (mouseY * 0.03);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+    <!-- Gallery Rendering Script -->
+    <script>
+        function renderProjectGallery(filter = 'all') {
+            const container = document.getElementById('full-projects-gallery');
+            let works = JSON.parse(localStorage.getItem('aks_portfolio_works')) || [
+                { name: "Royal Boutique & Retail", category: "Fashion & Apparel", url: "https://royalboutique.example.com", image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800" },
+                { name: "Verma Electronics Hub", category: "Electronics", url: "https://vermaelectronics.example.com", image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=800" },
+                { name: "Metro Sneakers & Streetwear", category: "Fashion & Apparel", url: "https://example.com", image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?w=800" }
+            ];
+
+            let filtered = filter === 'all' ? works : works.filter(w => w.category.toLowerCase().includes(filter.toLowerCase()));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-3 py-16 text-center text-slate-500 text-xs font-sans">No projects found in this category.</div>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach(p => {
+                container.innerHTML += `
+                    <div class="bg-[#0b0f19] perspective-card border border-cyan-500/30 rounded-3xl overflow-hidden shadow-[0_0_30px_rgba(6,182,212,0.05)] space-y-4 font-sans">
+                        <div class="relative h-56 overflow-hidden">
+                            <img src="${p.image || 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800'}" class="w-full h-full object-cover transform hover:scale-110 transition duration-700">
+                            <span class="absolute top-4 left-4 bg-[#030712]/90 backdrop-blur-md text-emerald-400 border border-emerald-500/30 text-[10px] uppercase tracking-wider font-extrabold px-3 py-1 rounded-full shadow-sm">
+                                ${p.category}
+                            </span>
+                        </div>
+                        <div class="p-6 pt-0 space-y-3">
+                            <h3 class="text-white font-black text-lg">${p.name}</h3>
+                            <p class="text-xs text-slate-400">Custom tailored e-commerce catalog featuring dual-portal dashboard & automated UPI settlements.</p>
+                            <a href="${p.url}" target="_blank" class="inline-flex items-center gap-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/30 px-4 py-2.5 rounded-xl text-xs font-bold transition">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Visit Live Platform
+                            </a>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = () => renderProjectGallery('all');
+    </script>
+</body>
+</html>

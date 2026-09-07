@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKS DEV LAB | Portal 3 - Video Media Manager</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #bg-3d-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .cyber-card {
+            background: linear-gradient(135deg, rgba(6, 18, 38, 0.95) 0%, rgba(2, 6, 18, 0.98) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(16, 185, 129, 0.03);
+        }
+        .dropdown-menu {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .dropdown-container:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#02040a] text-cyan-100 font-mono relative overflow-x-hidden min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
+
+    <canvas id="bg-3d-canvas"></canvas>
+
+    <!-- TOP TICKER -->
+    <div class="bg-gradient-to-r from-emerald-950 via-slate-950 to-blue-950 text-emerald-400 text-xs py-2.5 px-4 text-center font-black tracking-widest border-b border-emerald-500/40 shadow-[0_0_20px_rgba(16,185,129,0.3)] uppercase relative z-20">
+        ⚡ [VIDEO MEDIA MANAGER PORTAL] Advanced Content Pipeline & Stream Architecture
+    </div>
+
+    <!-- NAVIGATION HEADER -->
+    <header class="sticky top-0 z-50 bg-[#02040a]/90 backdrop-blur-2xl border-b border-cyan-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <div class="flex items-center space-x-3 shrink-0">
+                <div class="bg-gradient-to-tr from-emerald-500 to-teal-600 text-slate-950 p-2.5 rounded-xl font-black tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.6)] border border-emerald-300/40 animate-pulse">
+                    <i class="fa-solid fa-cube animate-spin" style="animation-duration: 8s;"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400 leading-tight block">AKS DEV LAB</span>
+                    <span class="block text-[9px] uppercase tracking-widest text-emerald-500 font-bold">Media Hub</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-6 text-xs font-bold text-slate-300 font-sans">
+                <a href="index.html" class="hover:text-cyan-400 transition">Storefront</a>
+                
+                <div class="relative dropdown-container py-4 cursor-pointer">
+                    <span class="text-emerald-400 font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-book-open"></i> Service Portals <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
+                    </span>
+                    <div class="dropdown-menu absolute top-full left-0 w-64 bg-[#060a14] border border-cyan-500/40 rounded-2xl shadow-2xl p-2 space-y-1 font-mono">
+                        <a href="service-architecture.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-cyan-300 transition">System Architecture</a>
+                        <a href="service-packages.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-amber-300 transition">Service Packages</a>
+                        <a href="service-media.html" class="block px-4 py-2.5 rounded-xl text-xs text-emerald-300 bg-emerald-950/40 font-bold transition">Video Media Manager</a>
+                        <a href="service-workflow.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-indigo-300 transition">Client Workflow</a>
+                        <a href="service-security.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/50 hover:text-rose-300 transition">Security & Roadmap</a>
+                    </div>
+                </div>
+
+                <a href="projects.html" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Projects Grid</a>
+            </nav>
+
+            <div class="flex items-center gap-3 shrink-0 font-sans">
+                <a href="index.html#contact" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-4 py-2.5 rounded-xl text-xs transition shadow-lg">Order Platform</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN COMPREHENSIVE MEDIA CONTENT -->
+    <main class="flex-grow max-w-5xl mx-auto px-4 py-16 space-y-12 relative z-10 font-sans">
+        
+        <!-- HEADER INTRO BLOCK -->
+        <div class="cyber-card p-8 sm:p-12 rounded-3xl space-y-6 shadow-2xl">
+            <span class="text-emerald-400 font-mono text-xs uppercase bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-1 rounded-full tracking-widest">Portal 3 of 5 • Video Content Pipeline</span>
+            <h1 class="text-3xl sm:text-5xl font-black text-white font-sans tracking-tight">Advanced Video Media Management & Stream Architecture</h1>
+            <p class="text-slate-300 leading-relaxed text-sm sm:text-base">
+                The AKS DEV LAB media pipeline bridges high-definition promotional video distribution with lightweight client-side browser performance. Administrators have direct control over media asset injection, allowing dynamic content to stream natively across storefront galleries with zero latency or layout shift.
+            </p>
+        </div>
+
+        <!-- SECTION 1: DUAL INGESTION ENGINE -->
+        <div class="cyber-card p-8 rounded-3xl space-y-4">
+            <h3 class="text-xl font-black text-white font-mono flex items-center gap-2"><i class="fa-solid fa-photo-film text-emerald-400"></i> Dual-Mode Content Ingestion Engine</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                The administrative console supports two distinct media integration methods optimized for different enterprise workflows:
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 text-xs">
+                <div class="bg-[#02040a] p-5 rounded-2xl border border-emerald-500/20 space-y-2">
+                    <strong class="text-emerald-400 font-mono block text-sm"><i class="fa-solid fa-cloud-arrow-up mr-1"></i> Direct Local File Encoding</strong>
+                    <p class="text-slate-400">Administrators can upload local video files directly through a Base64 reader stream. To ensure browser memory stability, files are recommended under 15MB, preserving crisp playback speeds without exceeding local storage thresholds.</p>
+                </div>
+                <div class="bg-[#02040a] p-5 rounded-2xl border border-emerald-500/20 space-y-2">
+                    <strong class="text-cyan-400 font-mono block text-sm"><i class="fa-solid fa-link mr-1"></i> External Embed URL Parsing</strong>
+                    <p class="text-slate-400">Seamlessly parses standard YouTube, Vimeo, or direct MP4 links, automatically sanitizing watch links into responsive iframe embed streams (<code class="text-cyan-300">/embed/</code> format).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: ASPECT RATIO PRESERVATION & HARDWARE ACCELERATION -->
+        <div class="cyber-card p-8 rounded-3xl space-y-4">
+            <h3 class="text-xl font-black text-white font-mono flex items-center gap-2"><i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i> Aspect Ratio Preservation & Performance Optimization</h3>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Unlike rigid video containers that force cropping or stretching on portrait and landscape recordings, the storefront video showcase utilizes dynamic aspect-ratio wrapping (<code class="text-cyan-300">aspect-video</code> and <code class="text-cyan-300">object-contain</code> styling). This ensures:
+            </p>
+            <ul class="space-y-3 text-xs sm:text-sm text-slate-300 font-mono pt-2">
+                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-400 mt-1"></i> <span><strong>Zero Distortion:</strong> Portrait mobile walkthroughs and wide promotional banners retain their original width-to-height proportions perfectly.</span></li>
+                <li class="flex items-start gap-2"><i class="fa-solid fa-check text-emerald-400 mt-1"></i> <span><strong>Hardware Acceleration & Lazy Loading:</strong> Media nodes incorporate <code class="text-cyan-300">preload="metadata"</code> and lazy-loading execution, preventing UI stuttering and frame drops during fast page scrolling.</span></li>
+            </ul>
+        </div>
+
+        <!-- NAVIGATION FOOTER BUTTONS -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 border-t border-cyan-500/20">
+            <a href="service-packages.html" class="text-xs text-slate-400 hover:text-cyan-300 transition"><i class="fa-solid fa-arrow-left mr-2"></i> Previous: Service Packages</a>
+            <a href="service-workflow.html" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black px-6 py-3 rounded-xl text-xs transition shadow-lg">Next: Client Workflow <i class="fa-solid fa-arrow-right ml-2"></i></a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#02040a] border-t border-cyan-500/20 py-8 text-center text-xs text-slate-500 font-sans relative z-10 mt-12">
+        AKS DEV LAB • Professional Local Business Solutions & Video Media Manager
+    </footer>
+
+    <!-- 3D THREE.JS BACKGROUND -->
+    <script>
+        const canvas = document.getElementById('bg-3d-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 1500;
+        const positions = new Float32Array(count * 3);
+        for(let i = 0; i < count * 3; i++) { positions[i] = (Math.random() - 0.5) * 18; }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ size: 0.035, color: 0x10b981, transparent: true, opacity: 0.75 });
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            particlesMesh.rotation.x += 0.0005;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
