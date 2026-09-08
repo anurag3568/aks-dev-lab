@@ -18,7 +18,6 @@
             z-index: -1;
             pointer-events: none;
         }
-        /* Holographic Neon Cyber-Cards */
         .cyber-card {
             background: linear-gradient(135deg, rgba(3, 11, 24, 0.85) 0%, rgba(1, 4, 12, 0.95) 100%);
             border: 1px solid rgba(6, 182, 212, 0.4);
@@ -89,6 +88,9 @@
             </nav>
 
             <div class="flex items-center gap-3 shrink-0 font-sans">
+                <button onclick="toggleSupportModal()" class="bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-500/40 px-3.5 py-2.5 rounded-xl font-bold text-xs transition flex items-center gap-2 whitespace-nowrap shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer">
+                    <i class="fa-solid fa-headset text-emerald-400 text-sm"></i> Support
+                </button>
                 <button onclick="toggleAuthModal()" class="bg-[#030712] hover:bg-cyan-950/50 text-cyan-300 border border-cyan-500/50 px-4 py-2.5 rounded-xl font-bold text-xs transition flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(6,182,212,0.25)] cursor-pointer">
                     <i class="fa-solid fa-user-shield text-cyan-400 text-sm"></i> Client Login / Dashboard
                 </button>
@@ -109,7 +111,6 @@
 
             <!-- 5 PORTALS CARDS GRID -->
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 font-sans">
-                <!-- Portal 1 -->
                 <a href="service-architecture.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
                     <div class="space-y-3">
                         <div class="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black shadow-[0_0_15px_rgba(6,182,212,0.3)]">01</div>
@@ -119,7 +120,6 @@
                     <span class="text-xs text-cyan-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
                 </a>
 
-                <!-- Portal 2 -->
                 <a href="service-packages.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
                     <div class="space-y-3">
                         <div class="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400 font-black shadow-[0_0_15px_rgba(245,158,11,0.3)]">02</div>
@@ -129,7 +129,6 @@
                     <span class="text-xs text-amber-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
                 </a>
 
-                <!-- Portal 3 -->
                 <a href="service-media.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
                     <div class="space-y-3">
                         <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-black shadow-[0_0_15px_rgba(16,185,129,0.3)]">03</div>
@@ -139,7 +138,6 @@
                     <span class="text-xs text-emerald-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
                 </a>
 
-                <!-- Portal 4 -->
                 <a href="service-workflow.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
                     <div class="space-y-3">
                         <div class="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/40 flex items-center justify-center text-indigo-400 font-black shadow-[0_0_15px_rgba(99,102,241,0.3)]">04</div>
@@ -149,7 +147,6 @@
                     <span class="text-xs text-indigo-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
                 </a>
 
-                <!-- Portal 5 -->
                 <a href="service-security.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
                     <div class="space-y-3">
                         <div class="w-10 h-10 rounded-2xl bg-rose-500/10 border border-rose-500/40 flex items-center justify-center text-rose-400 font-black shadow-[0_0_15px_rgba(244,63,94,0.3)]">05</div>
@@ -260,6 +257,40 @@
         </div>
     </section>
 
+    <!-- CUSTOMER SUPPORT MODAL -->
+    <div id="support-modal" class="fixed inset-0 z-50 bg-[#010308]/90 backdrop-blur-md hidden flex items-center justify-center p-4 font-sans">
+        <div class="cyber-card max-w-md w-full p-8 rounded-3xl space-y-6 relative shadow-2xl">
+            <button onclick="toggleSupportModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
+            <div class="text-center space-y-2">
+                <div class="inline-block bg-emerald-500/10 text-emerald-400 p-3 rounded-2xl border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                    <i class="fa-solid fa-headset text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-black text-white">24/7 Customer Support Desk</h3>
+                <p class="text-xs text-slate-400">Connect directly with our engineering headquarters or submit a support inquiry.</p>
+            </div>
+
+            <div class="space-y-4 font-mono text-xs">
+                <div class="bg-[#030712] p-4 rounded-2xl border border-cyan-500/30 space-y-2">
+                    <p class="text-slate-300"><i class="fa-solid fa-envelope text-rose-400 mr-2"></i> Support Email: <span id="support-modal-email" class="text-cyan-300 font-bold">support@aksdevlab.com</span></p>
+                    <p class="text-slate-300"><i class="fa-solid fa-phone text-emerald-400 mr-2"></i> Hotline: <span id="support-modal-phone" class="text-emerald-400 font-bold">+91 98765 43210</span></p>
+                </div>
+
+                <div class="space-y-3 font-sans">
+                    <label class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider block">Send Quick Inquiry Message</label>
+                    <input type="text" id="support-user-name" placeholder="Your Name" class="w-full bg-[#030712] border border-cyan-500/30 text-cyan-100 px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-cyan-400">
+                    <input type="tel" id="support-user-phone" placeholder="Your Phone Number" class="w-full bg-[#030712] border border-cyan-500/30 text-cyan-100 px-4 py-2.5 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                    <textarea id="support-user-msg" rows="3" placeholder="How can our technical support team help you?" class="w-full bg-[#030712] border border-cyan-500/30 text-cyan-100 px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-cyan-400"></textarea>
+                    
+                    <div class="grid grid-cols-2 gap-2 pt-2">
+                        <button onclick="sendSupportWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp Support</button>
+                        <button onclick="sendSupportEmail()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-envelope text-sm"></i> Email Support</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- CLIENT DASHBOARD MODAL -->
     <div id="auth-modal" class="fixed inset-0 z-50 bg-[#010308]/90 backdrop-blur-md hidden flex items-center justify-center p-4 font-sans">
         <div class="cyber-card max-w-md w-full p-8 rounded-3xl space-y-6 relative shadow-2xl">
@@ -303,7 +334,7 @@
         AKS DEV LAB • Professional Local Business Solutions
     </footer>
 
-    <!-- UNIQUE HOLOGRAPHIC 3D THREE.JS ENGINE WITH DUAL TORUS & INTERACTIVE PARALLAX -->
+    <!-- UNIQUE HOLOGRAPHIC 3D THREE.JS ENGINE -->
     <script>
         const canvas = document.getElementById('bg-3d-canvas');
         const scene = new THREE.Scene();
@@ -312,7 +343,6 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-        // 1. Holographic Starfield Particles (Floating Space Matrix)
         const particleCount = 3000;
         const geometry = new THREE.BufferGeometry();
         const positions = new Float32Array(particleCount * 3);
@@ -345,13 +375,11 @@
         const particlesMesh = new THREE.Points(geometry, material);
         scene.add(particlesMesh);
 
-        // 2. Outer Cybernetic Wireframe Torus (Rotating Ring)
         const torusGeometry = new THREE.TorusGeometry(5.0, 0.04, 16, 120);
         const torusMaterial = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.35 });
         const torusMesh = new THREE.Mesh(torusGeometry, torusMaterial);
         scene.add(torusMesh);
 
-        // 3. Inner Sci-Fi Dodecahedron Core
         const coreGeometry = new THREE.DodecahedronGeometry(2.2, 0);
         const coreMaterial = new THREE.MeshBasicMaterial({ color: 0x3b82f6, wireframe: true, transparent: true, opacity: 0.25 });
         const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
@@ -359,7 +387,6 @@
 
         camera.position.z = 7;
 
-        // Interactive Mouse Parallax & Tilt Tracking
         let mouseX = 0, mouseY = 0;
         let targetX = 0, targetY = 0;
         window.addEventListener('mousemove', (e) => {
@@ -370,7 +397,6 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            // Smooth interpolation for fluid cinematic camera response
             targetX += (mouseX - targetX) * 0.05;
             targetY += (mouseY - targetY) * 0.05;
 
@@ -394,9 +420,19 @@
         });
     </script>
 
-    <!-- STOREFRONT SYNC & DASHBOARD LOGIC -->
+    <!-- STOREFRONT SYNC, CLIENT DASHBOARD & RAZORPAY INTEGRATION -->
     <script>
+        const RAZORPAY_TEST_KEY = "rzp_test_TZRGeph38BtxEf";
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : '';
+
         function loadAgencyContactsOnIndex() {
+            let email = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
+            let phone = localStorage.getItem('agency_phone') || '+91 98765 43210';
+            if(document.getElementById('support-modal-email')) document.getElementById('support-modal-email').innerText = email;
+            if(document.getElementById('support-modal-phone')) document.getElementById('support-modal-phone').innerText = phone;
+
             let grid = document.getElementById('index-videos-grid');
             if(grid) {
                 let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
@@ -423,6 +459,30 @@
         window.addEventListener('DOMContentLoaded', loadAgencyContactsOnIndex);
         setInterval(loadAgencyContactsOnIndex, 2000);
 
+        function toggleSupportModal() {
+            document.getElementById('support-modal').classList.toggle('hidden');
+        }
+
+        function sendSupportWhatsApp() {
+            let name = document.getElementById('support-user-name').value.trim() || 'Valued Client';
+            let phone = document.getElementById('support-user-phone').value.trim() || 'N/A';
+            let msg = document.getElementById('support-user-msg').value.trim() || 'Hello, I need assistance with my website setup.';
+            let agencyPhone = (localStorage.getItem('agency_phone') || '+919876543210').replace(/[^0-9]/g, '');
+
+            let text = `💬 *[CUSTOMER SUPPORT INQUIRY]*\n\nName: ${name}\nPhone: ${phone}\n\nMessage:\n${msg}`;
+            window.open(`https://wa.me/${agencyPhone}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        function sendSupportEmail() {
+            let name = document.getElementById('support-user-name').value.trim() || 'Valued Client';
+            let msg = document.getElementById('support-user-msg').value.trim() || 'Hello, I need assistance with my website setup.';
+            let agencyEmail = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
+
+            let subject = encodeURIComponent('Support Inquiry from ' + name);
+            let body = encodeURIComponent(msg + '\n\nSender Name: ' + name);
+            window.open(`mailto:${agencyEmail}?subject=${subject}&body=${body}`, '_blank');
+        }
+
         function executeClientLogin() {
             const identifier = document.getElementById('login-identifier').value.trim();
             const password = document.getElementById('login-password').value.trim();
@@ -430,15 +490,15 @@
             if(!identifier) { alert('Please enter your email or phone.'); return; }
 
             let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
-            let client = inquiries.find(i => i.email.toLowerCase() === identifier.toLowerCase() || i.phone === identifier);
+            let client = inquiries.find(i => (i.email && i.email.toLowerCase() === identifier.toLowerCase()) || i.phone === identifier);
 
             if(!client) { alert('❌ Client profile not found! Please place an order first.'); return; }
             if(client.password && client.password !== password && password !== 'admin123') { alert('❌ Incorrect password!'); return; }
 
-            document.getElementById('dash-client-name').innerText = client.name;
-            document.getElementById('dash-shop-name').innerText = client.business;
-            document.getElementById('dash-phone').innerText = client.phone;
-            document.getElementById('dash-email').innerText = client.email;
+            document.getElementById('dash-client-name').innerText = client.name || 'Valued Client';
+            document.getElementById('dash-shop-name').innerText = client.business || 'N/A';
+            document.getElementById('dash-phone').innerText = client.phone || 'N/A';
+            document.getElementById('dash-email').innerText = client.email || 'N/A';
             
             document.getElementById('login-form-container').classList.add('hidden');
             document.getElementById('client-dashboard-panel').classList.remove('hidden');
@@ -451,12 +511,12 @@
             let isPaid = client.paymentStatus === 'Approved';
             let payBtn = isPaid ? 
                 `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold">✅ Paid & Active</span>` :
-                `<button onclick="payViaRazorpay('${client.id}', '${client.plan}', '${client.email}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs transition shadow-md cursor-pointer"><i class="fa-solid fa-credit-card mr-1"></i> Pay Now via Razorpay</button>`;
+                `<button onclick="payViaRazorpay('${client.id || Date.now()}', '${client.plan || 'Gold Package'}', '${client.email || ''}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs transition shadow-md cursor-pointer"><i class="fa-solid fa-credit-card mr-1"></i> Pay Now via Razorpay</button>`;
 
             let invoiceBtn = `<button onclick='downloadClientInvoice(${JSON.stringify(client)})' class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black px-4 py-2 rounded-xl text-xs transition shadow-md cursor-pointer"><i class="fa-solid fa-file-arrow-down mr-1"></i> Download Cyber Invoice</button>`;
 
             let siteUpdates = JSON.parse(localStorage.getItem('aks_site_updates')) || [];
-            let clientUpdates = siteUpdates.filter(u => u.targetEmail && u.targetEmail.toLowerCase() === client.email.toLowerCase() && !u.title.toLowerCase().includes('invoice') && !u.title.toLowerCase().includes('notice'));
+            let clientUpdates = siteUpdates.filter(u => u.targetEmail && client.email && u.targetEmail.toLowerCase() === client.email.toLowerCase() && !u.title.toLowerCase().includes('invoice') && !u.title.toLowerCase().includes('notice'));
             
             let updatesHtml = '';
             if(clientUpdates.length > 0) {
@@ -473,7 +533,7 @@
 
             container.innerHTML = `
                 <div class="bg-[#010308] p-4 rounded-2xl border border-cyan-500/30 space-y-2 text-xs">
-                    <p class="text-slate-300">Package: <strong class="text-cyan-300">${client.plan}</strong></p>
+                    <p class="text-slate-300">Package: <strong class="text-cyan-300">${client.plan || 'Custom Plan'}</strong></p>
                     <p class="text-slate-300">Status: <strong class="text-amber-400">${client.status || 'Pending'}</strong></p>
                     <div class="flex flex-wrap gap-2 pt-2">${payBtn} ${invoiceBtn}</div>
                     ${updatesHtml}
@@ -482,7 +542,7 @@
         }
 
         function downloadClientInvoice(client) {
-            let amount = client.plan.includes('Gold') ? '₹7,000' : (client.plan.includes('Diamond') ? '₹14,000' : '₹21,000');
+            let amount = (client.plan && client.plan.includes('Gold')) ? '₹7,000' : ((client.plan && client.plan.includes('Diamond')) ? '₹14,000' : '₹21,000');
             let aEmail = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
             let aPhone = localStorage.getItem('agency_phone') || '+91 98765 43210';
             let invNo = client.invoiceNo || 'INV-99281';
@@ -492,7 +552,7 @@
             invoiceWindow.document.write(`
                 <html>
                 <head>
-                    <title>Invoice - ${client.business}</title>
+                    <title>Invoice - ${client.business || 'Client'}</title>
                     <style>
                         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
                         body { font-family: 'JetBrains Mono', monospace; background: #010308 !important; color: #e2e8f0 !important; padding: 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -527,20 +587,20 @@
                         <div class="grid-info">
                             <div>
                                 <p style="color:#64748b; text-transform:uppercase; font-size:10px; margin-bottom:5px;">Billed To Client</p>
-                                <p style="font-size:13px; font-weight:bold; color:#f8fafc;">${client.name}</p>
-                                <p style="color:#cbd5e1;">${client.business}</p>
-                                <p style="color:#94a3b8; font-size:11px; margin-top:3px;">${client.email}</p>
+                                <p style="font-size:13px; font-weight:bold; color:#f8fafc;">${client.name || 'Valued Client'}</p>
+                                <p style="color:#cbd5e1;">${client.business || 'Custom Business'}</p>
+                                <p style="color:#94a3b8; font-size:11px; margin-top:3px;">${client.email || 'N/A'}</p>
                             </div>
                             <div style="text-align:right;">
                                 <p style="color:#64748b; text-transform:uppercase; font-size:10px; margin-bottom:5px;">Metadata & Credentials</p>
                                 <p style="color:#cbd5e1;"><strong>Date:</strong> ${client.date || new Date().toLocaleDateString()}</p>
-                                <p style="color:#38bdf8; margin-top:3px;"><strong>Store:</strong> <a href="${pUrl}" target="_blank" style="color:#38bdf8;">Live Link</a></p>
-                                <p style="color:#38bdf8; margin-top:3px;"><strong>Console Pass:</strong> <code style="color:#f59e0b;">${cPass}</code></p>
+                                <p style="color:#38bdf8; margin-top:3px;"><strong>Store:</strong> <a href="${client.publicUrl || '#'}" target="_blank" style="color:#38bdf8;">Live Link</a></p>
+                                <p style="color:#38bdf8; margin-top:3px;"><strong>Console Pass:</strong> <code style="color:#f59e0b;">${client.consolePass || 'N/A'}</code></p>
                             </div>
                         </div>
 
                         <div style="font-size: 13px; margin: 20px 0;">
-                            <p style="margin-bottom:8px;"><strong>Package Tier:</strong> <span style="color:#38bdf8;">${client.plan}</span></p>
+                            <p style="margin-bottom:8px;"><strong>Package Tier:</strong> <span style="color:#38bdf8;">${client.plan || 'Enterprise'}</span></p>
                             <p><strong>Fulfillment Status:</strong> <span style="color:#f59e0b; font-weight:bold; text-transform:uppercase;">${client.status || 'Pending'}</span></p>
                         </div>
 
@@ -555,7 +615,7 @@
 
                         <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#64748b;">
                             <div>
-                                <p><strong>Support Gmail:</strong> ${aEmail}</p>
+                                <p><strong>Support Email:</strong> ${aEmail}</p>
                                 <p><strong>Mobile Hotline:</strong> ${aPhone}</p>
                             </div>
                             <div style="text-align:right; color:#06b6d4;">
@@ -570,21 +630,47 @@
             invoiceWindow.print();
         }
 
-        function payViaRazorpay(orderId, planName, clientEmail) {
+        async function payViaRazorpay(orderId, planName, clientEmail) {
             let amountInPaise = 700000;
-            if(planName.includes('Diamond')) amountInPaise = 1400000;
-            if(planName.includes('Platinum')) amountInPaise = 2100000;
+            if (planName && planName.includes('Diamond')) amountInPaise = 1400000;
+            if (planName && planName.includes('Platinum')) amountInPaise = 2100000;
+
+            let serverOrderId = null;
+
+            // Attempt backend order generation if an API endpoint is configured
+            if (API_BASE_URL) {
+                try {
+                    const orderRes = await fetch(`${API_BASE_URL}/api/create-order`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ amount: amountInPaise, currency: 'INR', receipt: `rcpt_${orderId}` })
+                    });
+                    if (orderRes.ok) {
+                        const data = await orderRes.json();
+                        serverOrderId = data.order_id;
+                    }
+                } catch (e) {
+                    console.warn("Backend API unreachable, continuing with client test mode.");
+                }
+            }
 
             const options = {
-                "key": "rzp_test_TYhM0jeJXkc7ra",
-                "amount": amountInPaise, 
-                "currency": "INR",
-                "name": "AKS DEV LAB",
-                "description": planName,
-                "handler": function (response){
+                key: RAZORPAY_TEST_KEY,
+                amount: amountInPaise,
+                currency: "INR",
+                name: "AKS DEV LAB",
+                description: `${planName || 'Website Package'} Provisioning`,
+                theme: { color: "#06b6d4" },
+                prefill: {
+                    name: document.getElementById('dash-client-name')?.innerText || "Valued Client",
+                    email: clientEmail || "client@aksdevlab.in",
+                    contact: document.getElementById('dash-phone')?.innerText || ""
+                },
+                handler: async function (response) {
+                    // Update client state in localStorage
                     let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
-                    let target = inquiries.find(i => i.email.toLowerCase() === clientEmail.toLowerCase());
-                    if(target) {
+                    let target = inquiries.find(i => i.email && clientEmail && i.email.toLowerCase() === clientEmail.toLowerCase());
+                    if (target) {
                         target.paymentId = response.razorpay_payment_id;
                         target.paymentStatus = 'Approved';
                         target.status = 'Approved & Building';
@@ -593,9 +679,21 @@
                     }
                     alert("✅ Payment Successful! Payment ID: " + response.razorpay_payment_id);
                 },
-                "theme": { "color": "#06b6d4" }
+                modal: {
+                    ondismiss: function () {
+                        console.log("Razorpay checkout closed by user.");
+                    }
+                }
             };
+
+            if (serverOrderId) {
+                options.order_id = serverOrderId;
+            }
+
             const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (failure) {
+                alert("❌ Payment Failed: " + (failure.error ? failure.error.description : 'Transaction declined'));
+            });
             rzp.open();
         }
 
@@ -606,7 +704,9 @@
             document.getElementById('login-password').value = '';
         }
 
-        function toggleAuthModal() { document.getElementById('auth-modal').classList.toggle('hidden'); }
+        function toggleAuthModal() { 
+            document.getElementById('auth-modal').classList.toggle('hidden'); 
+        }
     </script>
 </body>
 </html>
