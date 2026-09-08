@@ -98,7 +98,7 @@
         </div>
     </header>
 
-    <!-- SECTION 1 (TOP): SERVICE PORTALS OVERVIEW -->
+    <!-- SECTION 1: SERVICE PORTALS OVERVIEW -->
     <section class="py-24 relative z-10 border-b border-cyan-500/20 bg-[#010308]/40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 space-y-12">
             <div class="text-center space-y-3 max-w-3xl mx-auto">
@@ -158,7 +158,7 @@
         </div>
     </section>
 
-    <!-- MIDDLE SECTION: DYNAMIC VIDEO GALLERY & PRICING -->
+    <!-- MIDDLE SECTION: DYNAMIC VIDEO GALLERY -->
     <section class="py-20 bg-[#02050f]/80 relative z-10 border-t border-cyan-500/30 font-sans backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 space-y-16">
             <div class="text-center space-y-2">
@@ -240,7 +240,7 @@
         </div>
     </section>
 
-    <!-- BOTTOM CALL TO ACTION FOR CUSTOM ORDER PORTAL -->
+    <!-- CALL TO ACTION -->
     <section class="py-24 bg-[#010308] border-t border-cyan-500/30 relative z-10 font-sans text-center">
         <div class="max-w-4xl mx-auto px-4 space-y-8 cyber-card p-12 rounded-3xl">
             <span class="text-cyan-400 font-bold text-xs uppercase bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-1 rounded-full tracking-widest font-mono shadow-[0_0_15px_rgba(6,182,212,0.2)]">Ready to Launch?</span>
@@ -333,7 +333,7 @@
         AKS DEV LAB • Professional Local Business Solutions
     </footer>
 
-    <!-- UNIQUE HOLOGRAPHIC 3D THREE.JS ENGINE -->
+    <!-- THREE.JS ENGINE -->
     <script>
         const canvas = document.getElementById('bg-3d-canvas');
         const scene = new THREE.Scene();
@@ -419,10 +419,12 @@
         });
     </script>
 
-    <!-- STOREFRONT SYNC, CLIENT DASHBOARD & RAZORPAY STANDARD WEB CHECKOUT -->
+    <!-- LIVE RAZORPAY STANDARD WEB CHECKOUT CLIENT LOGIC -->
     <script>
-        // Updated Razorpay Credentials
-        const RAZORPAY_TEST_KEY = "rzp_test_TZRT4B45N3sKQ1";
+        // Live Public Key ID
+        const RAZORPAY_LIVE_KEY = "rzp_live_TZRRwoiEdH5GpY";
+        
+        // Target backend API server URL (update with your deployed backend URL on Render/Vercel)
         const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5000'
             : '';
@@ -630,14 +632,14 @@
             invoiceWindow.print();
         }
 
-        // Razorpay Standard Checkout Launch Function
+        // Live Razorpay Checkout
         async function payViaRazorpay(orderId, planName, clientEmail) {
             let amountInPaise = 700000;
             if (planName && planName.includes('Diamond')) amountInPaise = 1400000;
             if (planName && planName.includes('Platinum')) amountInPaise = 2100000;
 
             let serverOrderId = null;
-            let activeKeyId = RAZORPAY_TEST_KEY;
+            let activeKeyId = RAZORPAY_LIVE_KEY;
 
             // Step 1: Call Backend to Create Order (if backend server is reachable)
             if (API_BASE_URL) {
@@ -660,11 +662,11 @@
                         console.warn("Backend order creation returned status:", orderRes.status);
                     }
                 } catch (e) {
-                    console.warn("Backend API unavailable, falling back to frontend test mode checkout.");
+                    console.warn("Backend API unavailable, falling back to direct checkout.");
                 }
             }
 
-            // Step 2: Open Razorpay Checkout Modal
+            // Step 2: Open Razorpay Live Checkout Modal
             const options = {
                 key: activeKeyId,
                 amount: amountInPaise,
