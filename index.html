@@ -109,7 +109,6 @@
                 </p>
             </div>
 
-            <!-- 5 PORTALS CARDS GRID -->
             <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 font-sans">
                 <a href="service-architecture.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
                     <div class="space-y-3">
@@ -420,9 +419,10 @@
         });
     </script>
 
-    <!-- STOREFRONT SYNC, CLIENT DASHBOARD & RAZORPAY INTEGRATION -->
+    <!-- STOREFRONT SYNC, CLIENT DASHBOARD & RAZORPAY STANDARD WEB CHECKOUT -->
     <script>
-        const RAZORPAY_TEST_KEY = "rzp_test_TZRGeph38BtxEf";
+        // Updated Razorpay Credentials
+        const RAZORPAY_TEST_KEY = "rzp_test_TZRT4B45N3sKQ1";
         const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5000'
             : '';
@@ -630,58 +630,95 @@
             invoiceWindow.print();
         }
 
+        // Razorpay Standard Checkout Launch Function
         async function payViaRazorpay(orderId, planName, clientEmail) {
             let amountInPaise = 700000;
             if (planName && planName.includes('Diamond')) amountInPaise = 1400000;
             if (planName && planName.includes('Platinum')) amountInPaise = 2100000;
 
             let serverOrderId = null;
+            let activeKeyId = RAZORPAY_TEST_KEY;
 
-            // Attempt backend order generation if an API endpoint is configured
+            // Step 1: Call Backend to Create Order (if backend server is reachable)
             if (API_BASE_URL) {
                 try {
                     const orderRes = await fetch(`${API_BASE_URL}/api/create-order`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ amount: amountInPaise, currency: 'INR', receipt: `rcpt_${orderId}` })
+                        body: JSON.stringify({
+                            amount: amountInPaise,
+                            currency: 'INR',
+                            receipt: `rcpt_${orderId || Date.now()}`
+                        })
                     });
+
                     if (orderRes.ok) {
-                        const data = await orderRes.json();
-                        serverOrderId = data.order_id;
+                        const orderData = await orderRes.json();
+                        serverOrderId = orderData.order_id;
+                        if (orderData.key_id) activeKeyId = orderData.key_id;
+                    } else {
+                        console.warn("Backend order creation returned status:", orderRes.status);
                     }
                 } catch (e) {
-                    console.warn("Backend API unreachable, continuing with client test mode.");
+                    console.warn("Backend API unavailable, falling back to frontend test mode checkout.");
                 }
             }
 
+            // Step 2: Open Razorpay Checkout Modal
             const options = {
-                key: RAZORPAY_TEST_KEY,
+                key: activeKeyId,
                 amount: amountInPaise,
                 currency: "INR",
                 name: "AKS DEV LAB",
                 description: `${planName || 'Website Package'} Provisioning`,
+                image: "https://anurag3568.github.io/aks-dev-lab/favicon.ico",
                 theme: { color: "#06b6d4" },
                 prefill: {
                     name: document.getElementById('dash-client-name')?.innerText || "Valued Client",
                     email: clientEmail || "client@aksdevlab.in",
                     contact: document.getElementById('dash-phone')?.innerText || ""
                 },
+                // Step 3: Handle Success & Verification
                 handler: async function (response) {
-                    // Update client state in localStorage
-                    let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
-                    let target = inquiries.find(i => i.email && clientEmail && i.email.toLowerCase() === clientEmail.toLowerCase());
-                    if (target) {
-                        target.paymentId = response.razorpay_payment_id;
-                        target.paymentStatus = 'Approved';
-                        target.status = 'Approved & Building';
-                        localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
-                        renderClientDashboardOrders(target);
+                    let verificationSuccess = true;
+
+                    // Send response to verify endpoint if backend is running
+                    if (API_BASE_URL && response.razorpay_signature) {
+                        try {
+                            const verifyRes = await fetch(`${API_BASE_URL}/api/verify-payment`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+                            const verifyData = await verifyRes.json();
+                            verificationSuccess = (verifyRes.ok && verifyData.status === 'success');
+                        } catch (err) {
+                            console.error("Verification endpoint error:", err);
+                        }
                     }
-                    alert("✅ Payment Successful! Payment ID: " + response.razorpay_payment_id);
+
+                    if (verificationSuccess) {
+                        let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+                        let target = inquiries.find(i => i.email && clientEmail && i.email.toLowerCase() === clientEmail.toLowerCase());
+                        if (target) {
+                            target.paymentId = response.razorpay_payment_id;
+                            target.paymentStatus = 'Approved';
+                            target.status = 'Approved & Building';
+                            localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+                            renderClientDashboardOrders(target);
+                        }
+                        alert("✅ Payment Successful & Verified! Payment ID: " + response.razorpay_payment_id);
+                    } else {
+                        alert("⚠️ Payment verification failed on server. Please contact support.");
+                    }
                 },
                 modal: {
                     ondismiss: function () {
-                        console.log("Razorpay checkout closed by user.");
+                        console.log("Razorpay checkout modal closed by user.");
                     }
                 }
             };
@@ -691,9 +728,12 @@
             }
 
             const rzp = new Razorpay(options);
+
+            // Handle payment failure event
             rzp.on('payment.failed', function (failure) {
                 alert("❌ Payment Failed: " + (failure.error ? failure.error.description : 'Transaction declined'));
             });
+
             rzp.open();
         }
 
