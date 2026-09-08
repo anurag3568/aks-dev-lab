@@ -421,10 +421,10 @@
 
     <!-- LIVE RAZORPAY STANDARD WEB CHECKOUT CLIENT LOGIC -->
     <script>
-        // Live Public Key ID
+        // Production Live Public Key ID (Secret key must NEVER be placed on client-side)
         const RAZORPAY_LIVE_KEY = "rzp_live_TZRRwoiEdH5GpY";
         
-        // Target backend API server URL (update with your deployed backend URL on Render/Vercel)
+        // Backend API Server Target (leave empty for standalone or set your live backend URL)
         const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5000'
             : '';
