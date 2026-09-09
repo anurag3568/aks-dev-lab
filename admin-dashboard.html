@@ -608,15 +608,22 @@
             let processVideoData = async (videoSrc) => {
                 const finalUrl = videoSrc || 'https://www.w3schools.com/html/mov_bbb.mp4';
                 
-                // 1. Sync directly to MongoDB Atlas
+               // 1. Sync directly to MongoDB Atlas
                 try {
-                    await fetch(`${API_BASE_URL}/api/videos`, {
+                    const res = await fetch(`${API_BASE_URL}/api/videos`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ title, url: finalUrl })
                     });
+                    const result = await res.json();
+                    if (!res.ok) {
+                        alert('❌ Upload failed: ' + (result.error || 'Server error ' + res.status));
+                        return;
+                    }
                 } catch (mongoErr) {
                     console.error('MongoDB sync error:', mongoErr);
+                    alert('❌ Network or Payload error: ' + mongoErr.message);
+                    return;
                 }
 
                 // 2. Retain local backup storage
