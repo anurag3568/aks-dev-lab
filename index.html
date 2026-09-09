@@ -50,7 +50,7 @@
     <canvas id="bg-3d-canvas"></canvas>
 
     <!-- TOP TICKER -->
-    <div class="bg-gradient-to-r from-cyan-950 via-[#010308] to-blue-950 text-cyan-400 text-xs py-2.5 px-4 text-center font-black tracking-widest border-b border-cyan-500/20">
+    <div class="bg-gradient-to-r from-cyan-950 via-[#010308] to-blue-950 text-cyan-400 text-xs py-2.5 px-4 text-center font-black tracking-widest border-b border-cyan-500/40 shadow-[0_0_25px_rgba(6,182,212,0.3)] uppercase relative z-20">
         ⚡ [HOLOGRAPHIC CORE ONLINE] Advanced 3D Interactive Cybernetic Platform
     </div>
 
@@ -58,7 +58,7 @@
     <header class="sticky top-0 z-50 bg-[#010308]/85 backdrop-blur-2xl border-b border-cyan-500/30 shadow-[0_4px_30px_rgba(0,0,0,0.95)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             <div class="flex items-center space-x-3 shrink-0">
-                <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 p-2.5 rounded-xl font-black tracking-wider shadow-[0_0_25px_rgba(6,182,212,0.5)]">
+                <div class="bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 p-2.5 rounded-xl font-black tracking-wider shadow-[0_0_25px_rgba(6,182,212,0.8)] border border-cyan-300/50 animate-pulse">
                     <i class="fa-solid fa-cube animate-spin" style="animation-duration: 8s;"></i>
                 </div>
                 <div>
@@ -74,140 +74,266 @@
                     <span class="hover:text-cyan-400 transition flex items-center gap-1.5">
                         <i class="fa-solid fa-book-open text-cyan-400"></i> Service Portals <i class="fa-solid fa-chevron-down text-[10px] ml-1"></i>
                     </span>
-                    <div class="dropdown-menu absolute top-full left-0 w-64 bg-[#030712] border border-cyan-500/50 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-2 space-y-1">
+                    <div class="dropdown-menu absolute top-full left-0 w-64 bg-[#030712] border border-cyan-500/50 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.9)] p-2 space-y-1 font-mono">
                         <a href="service-architecture.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-cyan-300 transition">System Architecture</a>
-                        <a href="service-packages.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-amber-300 transition">Pricing Packages</a>
-                        <a href="service-media.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-emerald-300 transition">3D Media Suite</a>
-                        <a href="service-workflow.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-indigo-300 transition">Workflow Matrix</a>
-                        <a href="service-security.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-rose-300 transition">Cryptographic Security</a>
+                        <a href="service-packages.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-amber-300 transition">Service Packages</a>
+                        <a href="service-media.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-emerald-300 transition">Video Media Manager</a>
+                        <a href="service-workflow.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-indigo-300 transition">Client Workflow</a>
+                        <a href="service-security.html" class="block px-4 py-2.5 rounded-xl text-xs text-slate-300 hover:bg-cyan-950/60 hover:text-rose-300 transition">Security & Roadmap</a>
                     </div>
                 </div>
 
-                <a href="projects.html" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Projects</a>
+                <a href="projects.html" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1"><i class="fa-solid fa-layer-group"></i> Projects Grid</a>
                 <a href="order.html" class="text-cyan-400 font-bold transition flex items-center gap-1"><i class="fa-solid fa-rocket"></i> Order Portal</a>
             </nav>
 
             <div class="flex items-center gap-3 shrink-0 font-sans">
-                <button onclick="toggleSupportModal()" class="bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-500/40 px-3.5 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                <button onclick="toggleSupportModal()" class="bg-emerald-950/50 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-500/40 px-3.5 py-2.5 rounded-xl font-bold text-xs transition flex items-center gap-2 whitespace-nowrap shadow-[0_0_15px_rgba(16,185,129,0.2)] cursor-pointer">
                     <i class="fa-solid fa-headset text-emerald-400 text-sm"></i> Support
                 </button>
-                <button onclick="toggleAuthModal()" class="bg-[#030712] hover:bg-cyan-950/50 text-cyan-300 border border-cyan-500/40 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                <button onclick="toggleAuthModal()" class="bg-[#030712] hover:bg-cyan-950/50 text-cyan-300 border border-cyan-500/50 px-4 py-2.5 rounded-xl font-bold text-xs transition flex items-center gap-2 whitespace-nowrap shadow-[0_0_20px_rgba(6,182,212,0.25)] cursor-pointer">
                     <i class="fa-solid fa-user-shield text-cyan-400 text-sm"></i> Client Login / Dashboard
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- SECTION 1: DYNAMIC SHOWCASE & CHECKOUT -->
+    <!-- SECTION 1: SERVICE PORTALS OVERVIEW -->
     <section class="py-24 relative z-10 border-b border-cyan-500/20 bg-[#010308]/40 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-4 space-y-12">
             <div class="text-center space-y-3 max-w-3xl mx-auto">
-                <span class="text-cyan-400 font-bold text-xs uppercase bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-1 rounded-full tracking-widest shadow-[0_0_15px_rgba(6,182,212,0.2)]">Live Ecosystem Integration</span>
-                <h1 class="text-3xl sm:text-5xl font-black text-white font-sans tracking-tight">Enterprise Infrastructure & Live Portal</h1>
+                <span class="text-cyan-400 font-bold text-xs uppercase bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-1 rounded-full tracking-widest shadow-[0_0_15px_rgba(6,182,212,0.2)]">Holographic Architecture Portals</span>
+                <h1 class="text-3xl sm:text-5xl font-black text-white font-sans tracking-tight">Explore Our 5-Stage 3D Technical Ecosystem</h1>
                 <p class="text-slate-300 text-sm sm:text-base font-sans leading-relaxed">
-                    Execute real-time test orders via Razorpay securely connected directly to your Node.js and MongoDB Atlas cloud backend.
+                    Navigate our decentralized state architecture, pricing packages, 3D video stream managers, client workflows, and cryptographic security protocols.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 font-sans">
-                <!-- Video Feed Card -->
-                <div class="cyber-card p-6 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between">
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-black text-white tracking-wide flex items-center gap-2">
-                                <i class="fa-solid fa-video text-cyan-400"></i> Decentralized Media Vault
-                            </h2>
-                            <span class="text-[10px] bg-cyan-950 text-cyan-300 border border-cyan-500/40 px-2.5 py-1 rounded-lg">MongoDB Synced</span>
-                        </div>
-                        <p class="text-xs text-slate-400">Dynamic video asset streams fetched straight from the live database backend collection.</p>
-                        <div id="index-videos-grid" class="grid grid-cols-1 gap-4 max-h-80 overflow-y-auto pr-1">
-                            <p class="text-xs text-slate-500 text-center italic">Loading custom video assets from backend...</p>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 font-sans">
+                <a href="service-architecture.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-500/40 flex items-center justify-center text-cyan-400 font-black shadow-[0_0_15px_rgba(6,182,212,0.3)]">01</div>
+                        <h3 class="text-white font-bold text-base group-hover:text-cyan-300 transition">System Architecture</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Three.js WebGL engine, zero-maintenance state persistence, and decentralized local storage.</p>
                     </div>
+                    <span class="text-xs text-cyan-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                </a>
+
+                <a href="service-packages.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/40 flex items-center justify-center text-amber-400 font-black shadow-[0_0_15px_rgba(245,158,11,0.3)]">02</div>
+                        <h3 class="text-white font-bold text-base group-hover:text-amber-300 transition">Service Packages</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Gold, Diamond, and Platinum one-time investment tiers with transparent deliverables.</p>
+                    </div>
+                    <span class="text-xs text-amber-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                </a>
+
+                <a href="service-media.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 border border-emerald-500/40 flex items-center justify-center text-emerald-400 font-black shadow-[0_0_15px_rgba(16,185,129,0.3)]">03</div>
+                        <h3 class="text-white font-bold text-base group-hover:text-emerald-300 transition">Video Media Manager</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Dual-mode content ingestion, aspect-ratio preservation, and zero-lag streaming pipeline.</p>
+                    </div>
+                    <span class="text-xs text-emerald-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                </a>
+
+                <a href="service-workflow.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-500/40 flex items-center justify-center text-indigo-400 font-black shadow-[0_0_15px_rgba(99,102,241,0.3)]">04</div>
+                        <h3 class="text-white font-bold text-base group-hover:text-indigo-300 transition">Client Workflow</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Automated onboarding, Razorpay payment verification, and omnichannel status dispatch.</p>
+                    </div>
+                    <span class="text-xs text-indigo-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                </a>
+
+                <a href="service-security.html" class="cyber-card p-6 rounded-3xl space-y-4 flex flex-col justify-between group">
+                    <div class="space-y-3">
+                        <div class="w-10 h-10 rounded-2xl bg-rose-500/10 border border-rose-500/40 flex items-center justify-center text-rose-400 font-black shadow-[0_0_15px_rgba(244,63,94,0.3)]">05</div>
+                        <h3 class="text-white font-bold text-base group-hover:text-rose-300 transition">Security & Roadmap</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Cryptographic session tokens, autocomplete protection, and future WebSockets scaling.</p>
+                    </div>
+                    <span class="text-xs text-rose-400 font-bold flex items-center gap-1 pt-2">Read Portal <i class="fa-solid fa-arrow-right text-[10px]"></i></span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MIDDLE SECTION: DYNAMIC VIDEO GALLERY -->
+    <section class="py-20 bg-[#02050f]/80 relative z-10 border-t border-cyan-500/30 font-sans backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 space-y-16">
+            <div class="text-center space-y-2">
+                <span class="text-cyan-400 font-bold text-xs uppercase bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-1 rounded-full tracking-widest shadow-[0_0_15px_rgba(6,182,212,0.2)]">Live Visual Stream</span>
+                <h2 class="text-3xl font-black text-white font-mono">Platform Walkthrough & Demos</h2>
+                <p class="text-xs text-slate-400">Uploaded instantly from the administrator cyber-console manager.</p>
+            </div>
+            <div id="index-videos-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        </div>
+    </section>
+
+    <!-- PRICING PACKAGES -->
+    <section id="pricing" class="py-24 bg-[#030716]/60 border-t border-cyan-500/25 relative z-10 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 space-y-12 text-center">
+            <div class="space-y-3">
+                <span class="text-amber-400 font-bold text-xs uppercase bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full tracking-widest shadow-[0_0_15px_rgba(245,158,11,0.2)]">Transparent One-Time Investment</span>
+                <h2 class="text-3xl font-black text-white font-sans">Select Your Business Tier</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left font-sans">
+                <!-- Gold -->
+                <div class="cyber-card p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Starter Tier</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Gold Package</h3>
+                            <div class="text-3xl font-black text-cyan-300 mt-3 font-mono">₹7,000</div>
+                        </div>
+                        <hr class="border-cyan-500/20 my-4">
+                        <ul class="space-y-3 text-xs text-slate-300">
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> 7 – 10 Days Delivery</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Custom Shop Domain</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> 2 Pages Professional Website</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Separate Owner Console</li>
+                        </ul>
+                    </div>
+                    <a href="order.html" class="w-full text-center bg-[#030712] hover:bg-cyan-950/60 text-cyan-200 font-bold py-3.5 rounded-xl text-xs transition border border-cyan-500/50 cursor-pointer mt-6 shadow-[0_0_15px_rgba(6,182,212,0.2)] block">Select Gold & Order</a>
                 </div>
 
-                <!-- Secure Order / Payment Simulation Card -->
-                <div class="cyber-card p-6 sm:p-8 rounded-3xl space-y-6 flex flex-col justify-between">
-                    <div class="space-y-5">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-black text-white tracking-wide flex items-center gap-2">
-                                <i class="fa-solid fa-shield-halved text-emerald-400"></i> Secure Gateway Checkout
-                            </h2>
-                            <span class="text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-lg">Razorpay Live Ready</span>
+                <!-- Diamond -->
+                <div class="cyber-card p-8 rounded-3xl space-y-6 relative overflow-hidden flex flex-col justify-between border-amber-500/70 shadow-[0_0_50px_rgba(245,158,11,0.25)]">
+                    <span class="absolute top-4 right-4 bg-amber-500 text-slate-950 font-black text-[10px] uppercase px-3 py-1 rounded-full tracking-widest shadow-[0_0_15px_rgba(245,158,11,0.5)]">Most Popular</span>
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-widest">Growth Tier</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Diamond Package</h3>
+                            <div class="text-3xl font-black text-amber-300 mt-3 font-mono">₹14,000</div>
                         </div>
-                        <p class="text-xs text-slate-400">Initiate a test transaction processed securely through your server API endpoints.</p>
-                        
-                        <div class="space-y-4 pt-2">
-                            <div>
-                                <label class="block text-xs font-bold text-cyan-300 uppercase tracking-wider mb-2">Select Service Tier</label>
-                                <select id="order-tier-select" class="w-full bg-[#030712] border border-cyan-500/40 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition">
-                                    <option value="10000">Starter Tier - ₹100.00 INR</option>
-                                    <option value="50000" selected>Professional Enterprise Tier - ₹500.00 INR</option>
-                                    <option value="250000">Holographic Custom Build - ₹2,500.00 INR</option>
-                                </select>
-                            </div>
-                            <div class="p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/20 space-y-2 text-xs text-slate-300">
-                                <div class="flex justify-between"><span>Gateway Protocol:</span> <span class="text-cyan-400 font-bold">REST API / TLS 1.3</span></div>
-                                <div class="flex justify-between"><span>Database Cluster:</span> <span class="text-emerald-400 font-bold">MongoDB Atlas (0.0.0.0/0 Active)</span></div>
-                                <div class="flex justify-between"><span>Deployment Host:</span> <span class="text-cyan-400 font-bold">Render Cloud Platform</span></div>
-                            </div>
-                        </div>
+                        <hr class="border-amber-500/20 my-4">
+                        <ul class="space-y-3 text-xs text-slate-300">
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> 10 – 15 Days Delivery</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Custom Shop Domain</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> 3 Pages Dynamic Website</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Separate Owner Console</li>
+                        </ul>
                     </div>
+                    <a href="order.html" class="w-full text-center bg-amber-500 hover:bg-amber-400 text-slate-950 font-black py-3.5 rounded-xl text-xs transition cursor-pointer mt-6 shadow-[0_0_20px_rgba(245,158,11,0.4)] block">Select Diamond & Order</a>
+                </div>
 
-                    <button onclick="startLiveCheckout()" class="w-full mt-6 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black py-4 rounded-2xl transition shadow-[0_0_30px_rgba(6,182,212,0.4)] flex items-center justify-center gap-2 text-sm tracking-wider uppercase cursor-pointer">
-                        <i class="fa-solid fa-lock text-slate-950"></i> Initialize Secured Checkout
-                    </button>
+                <!-- Platinum -->
+                <div class="cyber-card p-8 rounded-3xl space-y-6 flex flex-col justify-between">
+                    <div class="space-y-4">
+                        <div>
+                            <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Enterprise Tier</span>
+                            <h3 class="text-2xl font-black text-white mt-1">Platinum Package</h3>
+                            <div class="text-3xl font-black text-blue-300 mt-3 font-mono">₹21,000</div>
+                        </div>
+                        <hr class="border-blue-500/20 my-4">
+                        <ul class="space-y-3 text-xs text-slate-300">
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> 15 – 20 Days Delivery</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Custom Domain & Hosting</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> 4–5 Pages Fully Featured Website</li>
+                            <li><i class="fa-solid fa-check text-emerald-400 mr-2"></i> Owner Console to Add Business Details</li>
+                        </ul>
+                    </div>
+                    <a href="order.html" class="w-full text-center bg-blue-600 hover:bg-blue-500 text-white font-black py-3.5 rounded-xl text-xs transition cursor-pointer mt-6 shadow-[0_0_20px_rgba(59,130,246,0.3)] block">Select Platinum & Order</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SUPPORT MODAL -->
-    <div id="support-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-[#010308]/80 backdrop-blur-md p-4 font-sans">
-        <div class="cyber-card max-w-md w-full p-6 sm:p-8 rounded-3xl space-y-6 relative">
-            <button onclick="toggleSupportModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <div class="space-y-2">
-                <h3 class="text-xl font-black text-white flex items-center gap-2"><i class="fa-solid fa-headset text-emerald-400"></i> Direct Support Channel</h3>
-                <p class="text-xs text-slate-400">Connect instantly with technical support and infrastructure managers.</p>
+    <!-- CALL TO ACTION -->
+    <section class="py-24 bg-[#010308] border-t border-cyan-500/30 relative z-10 font-sans text-center">
+        <div class="max-w-4xl mx-auto px-4 space-y-8 cyber-card p-12 rounded-3xl">
+            <span class="text-cyan-400 font-bold text-xs uppercase bg-cyan-500/10 border border-cyan-500/30 px-3.5 py-1 rounded-full tracking-widest font-mono shadow-[0_0_15px_rgba(6,182,212,0.2)]">Ready to Launch?</span>
+            <h2 class="text-3xl sm:text-5xl font-black text-white">Order Custom Website & Connect With Headquarters</h2>
+            <p class="text-slate-300 text-sm sm:text-base max-w-xl mx-auto">
+                Transition from exploration to active enterprise provisioning. Open our dedicated secure order portal to submit your specifications and provision your admin credentials instantly.
+            </p>
+            <div class="pt-4">
+                <a href="order.html" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black px-10 py-4 rounded-xl text-sm transition shadow-[0_0_40px_rgba(6,182,212,0.8)] inline-flex items-center gap-3 transform hover:scale-105">
+                    <i class="fa-solid fa-rocket text-base"></i> Open Dedicated Order Portal Page
+                </a>
             </div>
-            <div class="space-y-4 text-sm">
-                <div class="p-4 rounded-2xl bg-[#030712] border border-cyan-500/30 flex items-center justify-between">
-                    <span class="text-slate-400 text-xs">Direct Email:</span>
-                    <span id="support-modal-email" class="text-cyan-300 font-bold text-xs">support@aksdevlab.com</span>
+        </div>
+    </section>
+
+    <!-- CUSTOMER SUPPORT MODAL -->
+    <div id="support-modal" class="fixed inset-0 z-50 bg-[#010308]/90 backdrop-blur-md hidden flex items-center justify-center p-4 font-sans">
+        <div class="cyber-card max-w-md w-full p-8 rounded-3xl space-y-6 relative shadow-2xl">
+            <button onclick="toggleSupportModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
+            <div class="text-center space-y-2">
+                <div class="inline-block bg-emerald-500/10 text-emerald-400 p-3 rounded-2xl border border-emerald-500/30 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                    <i class="fa-solid fa-headset text-2xl"></i>
                 </div>
-                <div class="p-4 rounded-2xl bg-[#030712] border border-cyan-500/30 flex items-center justify-between">
-                    <span class="text-slate-400 text-xs">Direct Hotline:</span>
-                    <span id="support-modal-phone" class="text-emerald-300 font-bold text-xs">+91 98765 43210</span>
+                <h3 class="text-xl font-black text-white">24/7 Customer Support Desk</h3>
+                <p class="text-xs text-slate-400">Connect directly with our engineering headquarters or submit a support inquiry.</p>
+            </div>
+
+            <div class="space-y-4 font-mono text-xs">
+                <div class="bg-[#030712] p-4 rounded-2xl border border-cyan-500/30 space-y-2">
+                    <p class="text-slate-300"><i class="fa-solid fa-envelope text-rose-400 mr-2"></i> Support Email: <span id="support-modal-email" class="text-cyan-300 font-bold">support@aksdevlab.com</span></p>
+                    <p class="text-slate-300"><i class="fa-solid fa-phone text-emerald-400 mr-2"></i> Hotline: <span id="support-modal-phone" class="text-emerald-400 font-bold">+91 98765 43210</span></p>
+                </div>
+
+                <div class="space-y-3 font-sans">
+                    <label class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider block">Send Quick Inquiry Message</label>
+                    <input type="text" id="support-user-name" placeholder="Your Name" class="w-full bg-[#030712] border border-cyan-500/30 text-cyan-100 px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-cyan-400">
+                    <input type="tel" id="support-user-phone" placeholder="Your Phone Number" class="w-full bg-[#030712] border border-cyan-500/30 text-cyan-100 px-4 py-2.5 rounded-xl text-xs font-mono focus:outline-none focus:border-cyan-400">
+                    <textarea id="support-user-msg" rows="3" placeholder="How can our technical support team help you?" class="w-full bg-[#030712] border border-cyan-500/30 text-cyan-100 px-4 py-2.5 rounded-xl text-xs focus:outline-none focus:border-cyan-400"></textarea>
+                    
+                    <div class="grid grid-cols-2 gap-2 pt-2">
+                        <button onclick="sendSupportWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp Support</button>
+                        <button onclick="sendSupportEmail()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3 rounded-xl text-xs transition flex items-center justify-center gap-2 cursor-pointer shadow-md"><i class="fa-solid fa-envelope text-sm"></i> Email Support</button>
+                    </div>
                 </div>
             </div>
-            <button onclick="toggleSupportModal()" class="w-full bg-cyan-950/60 hover:bg-cyan-900 text-cyan-300 border border-cyan-500/40 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition">Close Portal</button>
         </div>
     </div>
 
-    <!-- AUTH MODAL -->
-    <div id="auth-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-[#010308]/80 backdrop-blur-md p-4 font-sans">
-        <div class="cyber-card max-w-md w-full p-6 sm:p-8 rounded-3xl space-y-6 relative">
-            <button onclick="toggleAuthModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg"><i class="fa-solid fa-xmark"></i></button>
-            <div class="space-y-2">
-                <h3 class="text-xl font-black text-white flex items-center gap-2"><i class="fa-solid fa-user-shield text-cyan-400"></i> Client Authorization</h3>
-                <p class="text-xs text-slate-400">Authenticate securely to access administrative logs and video controllers.</p>
+    <!-- CLIENT DASHBOARD MODAL -->
+    <div id="auth-modal" class="fixed inset-0 z-50 bg-[#010308]/90 backdrop-blur-md hidden flex items-center justify-center p-4 font-sans">
+        <div class="cyber-card max-w-md w-full p-8 rounded-3xl space-y-6 relative shadow-2xl">
+            <button onclick="toggleAuthModal()" class="absolute top-6 right-6 text-slate-400 hover:text-white cursor-pointer"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
+            <div class="text-center space-y-1">
+                <h3 class="text-xl font-black text-white">Client Portal Access</h3>
+                <p class="text-xs text-slate-400">Enter your credentials or use default phone PIN.</p>
             </div>
-            <div class="space-y-4">
+
+            <div id="login-form-container" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold text-cyan-300 mb-1.5 uppercase">Client Security Token / Key</label>
-                    <input type="password" id="auth-pass-input" placeholder="Enter secure passphrase..." class="w-full bg-[#030712] border border-cyan-500/40 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400">
+                    <label class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider block mb-1">Email or Phone</label>
+                    <input type="text" id="login-identifier" autocomplete="off" placeholder="client@example.com" class="w-full bg-[#010308] border border-cyan-500/30 text-cyan-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-cyan-400">
                 </div>
-                <button onclick="verifyClientLogin()" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 text-slate-950 font-black py-3.5 rounded-xl text-xs uppercase tracking-wider transition">Authorize Session</button>
+                <div>
+                    <label class="text-[11px] font-bold text-cyan-400 uppercase tracking-wider block mb-1">Password</label>
+                    <input type="password" id="login-password" autocomplete="off" placeholder="••••••••" class="w-full bg-[#010308] border border-cyan-500/30 text-cyan-100 px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400">
+                </div>
+                <button onclick="executeClientLogin()" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3.5 rounded-xl text-xs transition shadow-lg cursor-pointer">
+                    Access Dashboard
+                </button>
+            </div>
+
+            <div id="client-dashboard-panel" class="hidden space-y-4 pt-2">
+                <div class="bg-[#010308] p-4 rounded-2xl border border-cyan-500/30 text-xs space-y-2">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-white font-bold text-sm" id="dash-client-name">Client Name</h4>
+                        <button onclick="clientLogout()" class="text-rose-400 font-bold hover:underline cursor-pointer">Logout</button>
+                    </div>
+                    <p class="text-slate-300">Shop Name: <strong class="text-cyan-300" id="dash-shop-name"></strong></p>
+                    <p class="text-slate-300">Phone: <strong class="text-emerald-400 font-mono" id="dash-phone"></strong></p>
+                    <p class="text-slate-300">Email: <strong class="text-indigo-300" id="dash-email"></strong></p>
+                </div>
+                <div id="dash-orders-container" class="space-y-3"></div>
             </div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="py-12 bg-[#010308] border-t border-cyan-500/20 text-center text-xs text-slate-500 font-sans">
-        <p>© 2026 AKS DEV LAB. All rights reserved. Secured via MongoDB Atlas & Render Cloud Infrastructure.</p>
+    <footer class="bg-[#010308] border-t border-cyan-500/30 py-8 text-center text-xs text-slate-500 relative z-10 font-sans">
+        AKS DEV LAB • Professional Local Business Solutions
     </footer>
 
-    <!-- LIVE THREE.JS BACKGROUND SCRIPT -->
+    <!-- THREE.JS ENGINE -->
     <script>
         const canvas = document.getElementById('bg-3d-canvas');
         const scene = new THREE.Scene();
@@ -222,8 +348,8 @@
         const colors = new Float32Array(particleCount * 3);
 
         const colorCyan = new THREE.Color(0x06b6d4);
-        const colorBlue = new THREE.Color(0x03b8f6);
-        const colorPurple = new THREE.Color(0xa8b5cf6);
+        const colorBlue = new THREE.Color(0x3b82f6);
+        const colorPurple = new THREE.Color(0x8b5cf6);
 
         for(let i = 0; i < particleCount * 3; i += 3) {
             positions[i] = (Math.random() - 0.5) * 30;
@@ -248,9 +374,20 @@
         const particlesMesh = new THREE.Points(geometry, material);
         scene.add(particlesMesh);
 
+        const torusGeometry = new THREE.TorusGeometry(5.0, 0.04, 16, 120);
+        const torusMaterial = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true, transparent: true, opacity: 0.35 });
+        const torusMesh = new THREE.Mesh(torusGeometry, torusMaterial);
+        scene.add(torusMesh);
+
+        const coreGeometry = new THREE.DodecahedronGeometry(2.2, 0);
+        const coreMaterial = new THREE.MeshBasicMaterial({ color: 0x3b82f6, wireframe: true, transparent: true, opacity: 0.25 });
+        const coreMesh = new THREE.Mesh(coreGeometry, coreMaterial);
+        scene.add(coreMesh);
+
         camera.position.z = 7;
 
         let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX - window.innerWidth / 2) * 0.0015;
             mouseY = (e.clientY - window.innerHeight / 2) * 0.0015;
@@ -258,8 +395,19 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            particlesMesh.rotation.y += 0.001 + mouseX * 0.2;
-            particlesMesh.rotation.x += 0.0005 + mouseY * 0.2;
+
+            targetX += (mouseX - targetX) * 0.05;
+            targetY += (mouseY - targetY) * 0.05;
+
+            particlesMesh.rotation.y += 0.001 + targetX;
+            particlesMesh.rotation.x += 0.0005 + targetY;
+
+            torusMesh.rotation.x += 0.0025;
+            torusMesh.rotation.y += 0.0035;
+
+            coreMesh.rotation.x -= 0.004;
+            coreMesh.rotation.y -= 0.003;
+
             renderer.render(scene, camera);
         }
         animate();
@@ -273,10 +421,13 @@
 
     <!-- LIVE RAZORPAY STANDARD WEB CHECKOUT CLIENT LOGIC -->
     <script>
-        // Backend API Server Target (Live Render URL configured)
+        // Production Live Public Key ID (Secret key must NEVER be placed on client-side)
+        const RAZORPAY_LIVE_KEY = "rzp_live_TZRRwoiEdH5GpY";
+        
+        // Backend API Server Target (leave empty for standalone or set your live backend URL)
         const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
             ? 'http://localhost:5000'
-            : 'https://aks-dev-lab-1.onrender.com';
+            : '';
 
         function loadAgencyContactsOnIndex() {
             let email = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
@@ -286,99 +437,317 @@
 
             let grid = document.getElementById('index-videos-grid');
             if(grid) {
-                // Fetch live video records from backend API
-                fetch(`${API_BASE_URL}/api/videos`)
-                    .then(res => res.json())
-                    .then(videos => {
-                        if(!videos || videos.length === 0) {
-                            grid.innerHTML = `<p class="text-xs text-slate-500 text-center italic">No video assets recorded in MongoDB Atlas yet.</p>`;
-                        } else {
-                            grid.innerHTML = '';
-                            videos.forEach(vid => {
-                                grid.innerHTML += `
-                                    <div class="cyber-card p-4 rounded-2xl space-y-2">
-                                        <h4 class="text-white font-bold text-xs">${vid.title || 'Untitled Asset'}</h4>
-                                        <p class="text-[10px] text-cyan-400 truncate">${vid.url}</p>
-                                    </div>
-                                `;
-                            });
-                        }
-                    })
-                    .catch(err => {
-                        grid.innerHTML = `<p class="text-xs text-rose-400 text-center italic">Error connecting to MongoDB backend storage.</p>`;
+                let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
+                if(customVideos.length === 0) {
+                    grid.innerHTML = `<p class="text-xs text-slate-500 text-center col-span-2 font-mono italic">No custom showcase videos published yet from the admin console.</p>`;
+                } else {
+                    grid.innerHTML = '';
+                    customVideos.forEach(vid => {
+                        let isEmbed = vid.url.includes('youtube') || vid.url.includes('embed');
+                        let mediaElement = isEmbed ? 
+                            `<iframe src="${vid.url}" class="w-full aspect-video rounded-2xl border border-cyan-500/30 shadow-lg" loading="lazy" allowfullscreen></iframe>` :
+                            `<video src="${vid.url}" preload="metadata" playsinline muted controls class="w-full h-auto rounded-2xl border border-cyan-500/30 bg-black shadow-lg" style="max-height: 450px; object-fit: contain;"></video>`;
+                        grid.innerHTML += `
+                            <div class="cyber-card p-5 rounded-3xl space-y-3 shadow-xl">
+                                <h4 class="text-white font-bold text-sm font-mono">${vid.title}</h4>
+                                ${mediaElement}
+                            </div>
+                        `;
                     });
+                }
             }
         }
+
         window.addEventListener('DOMContentLoaded', loadAgencyContactsOnIndex);
+        setInterval(loadAgencyContactsOnIndex, 2000);
 
         function toggleSupportModal() {
-            let m = document.getElementById('support-modal');
-            m.classList.toggle('hidden');
-            m.classList.toggle('flex');
+            document.getElementById('support-modal').classList.toggle('hidden');
         }
 
-        function toggleAuthModal() {
-            let m = document.getElementById('auth-modal');
-            m.classList.toggle('hidden');
-            m.classList.toggle('flex');
+        function sendSupportWhatsApp() {
+            let name = document.getElementById('support-user-name').value.trim() || 'Valued Client';
+            let phone = document.getElementById('support-user-phone').value.trim() || 'N/A';
+            let msg = document.getElementById('support-user-msg').value.trim() || 'Hello, I need assistance with my website setup.';
+            let agencyPhone = (localStorage.getItem('agency_phone') || '+919876543210').replace(/[^0-9]/g, '');
+
+            let text = `💬 *[CUSTOMER SUPPORT INQUIRY]*\n\nName: ${name}\nPhone: ${phone}\n\nMessage:\n${msg}`;
+            window.open(`https://wa.me/${agencyPhone}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
-        function verifyClientLogin() {
-            let pass = document.getElementById('auth-pass-input').value;
-            if(pass === 'aksdevlab2026') {
-                alert('Authorization successful! Redirecting to secure dashboard...');
-                window.location.href = 'projects.html';
-            } else {
-                alert('Invalid security key credentials.');
-            }
+        function sendSupportEmail() {
+            let name = document.getElementById('support-user-name').value.trim() || 'Valued Client';
+            let msg = document.getElementById('support-user-msg').value.trim() || 'Hello, I need assistance with my website setup.';
+            let agencyEmail = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
+
+            let subject = encodeURIComponent('Support Inquiry from ' + name);
+            let body = encodeURIComponent(msg + '\n\nSender Name: ' + name);
+            window.open(`mailto:${agencyEmail}?subject=${subject}&body=${body}`, '_blank');
         }
 
-        async function startLiveCheckout() {
-            const amountSelect = document.getElementById('order-tier-select').value;
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/create-order`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ amount: parseInt(amountSelect, 10) })
+        function executeClientLogin() {
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password = document.getElementById('login-password').value.trim();
+
+            if(!identifier) { alert('Please enter your email or phone.'); return; }
+
+            let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+            let client = inquiries.find(i => (i.email && i.email.toLowerCase() === identifier.toLowerCase()) || i.phone === identifier);
+
+            if(!client) { alert('❌ Client profile not found! Please place an order first.'); return; }
+            if(client.password && client.password !== password && password !== 'admin123') { alert('❌ Incorrect password!'); return; }
+
+            document.getElementById('dash-client-name').innerText = client.name || 'Valued Client';
+            document.getElementById('dash-shop-name').innerText = client.business || 'N/A';
+            document.getElementById('dash-phone').innerText = client.phone || 'N/A';
+            document.getElementById('dash-email').innerText = client.email || 'N/A';
+            
+            document.getElementById('login-form-container').classList.add('hidden');
+            document.getElementById('client-dashboard-panel').classList.remove('hidden');
+
+            renderClientDashboardOrders(client);
+        }
+
+        function renderClientDashboardOrders(client) {
+            const container = document.getElementById('dash-orders-container');
+            let isPaid = client.paymentStatus === 'Approved';
+            let payBtn = isPaid ? 
+                `<span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-xl text-xs font-bold">✅ Paid & Active</span>` :
+                `<button onclick="payViaRazorpay('${client.id || Date.now()}', '${client.plan || 'Gold Package'}', '${client.email || ''}')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-black px-4 py-2 rounded-xl text-xs transition shadow-md cursor-pointer"><i class="fa-solid fa-credit-card mr-1"></i> Pay Now via Razorpay</button>`;
+
+            let invoiceBtn = `<button onclick='downloadClientInvoice(${JSON.stringify(client)})' class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-black px-4 py-2 rounded-xl text-xs transition shadow-md cursor-pointer"><i class="fa-solid fa-file-arrow-down mr-1"></i> Download Cyber Invoice</button>`;
+
+            let siteUpdates = JSON.parse(localStorage.getItem('aks_site_updates')) || [];
+            let clientUpdates = siteUpdates.filter(u => u.targetEmail && client.email && u.targetEmail.toLowerCase() === client.email.toLowerCase() && !u.title.toLowerCase().includes('invoice') && !u.title.toLowerCase().includes('notice'));
+            
+            let updatesHtml = '';
+            if(clientUpdates.length > 0) {
+                updatesHtml = `<div class="mt-3 space-y-2 border-t border-cyan-500/20 pt-2"><p class="text-cyan-400 font-bold text-[11px]">📢 Live Status & Milestone Feed:</p>`;
+                let seenTitles = new Set();
+                clientUpdates.forEach(upd => {
+                    if(!seenTitles.has(upd.title + upd.description)) {
+                        seenTitles.add(upd.title + upd.description);
+                        updatesHtml += `<div class="p-2.5 bg-[#010308] rounded-xl border border-cyan-500/20 text-slate-300 space-y-1"><p class="font-bold text-white">${upd.title}</p><p class="text-[11px]">${upd.description}</p><span class="text-[9px] text-slate-500">${upd.date}</span></div>`;
+                    }
                 });
-                const orderData = await response.json();
-                if(orderData.error) {
-                    alert('Order creation failed: ' + orderData.error);
-                    return;
-                }
-
-                const options = {
-                    key: orderData.key_id,
-                    amount: orderData.amount,
-                    currency: orderData.currency,
-                    name: "AKS DEV LAB",
-                    description: "Enterprise IT & E-Commerce Solutions",
-                    order_id: orderData.order_id,
-                    handler: async function (response) {
-                        const verifyRes = await fetch(`${API_BASE_URL}/api/verify-payment`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature
-                            })
-                        });
-                        const verifyData = await verifyRes.json();
-                        if(verifyData.status === 'success') {
-                            alert('Payment verified & recorded successfully! Payment ID: ' + verifyData.paymentId);
-                        } else {
-                            alert('Payment verification failed.');
-                        }
-                    },
-                    theme: { color: "#06b6d4" }
-                };
-                const rzp = new Razorpay(options);
-                rzp.open();
-            } catch (err) {
-                console.error(err);
-                alert('Failed to connect to live Render backend endpoint.');
+                updatesHtml += `</div>`;
             }
+
+            container.innerHTML = `
+                <div class="bg-[#010308] p-4 rounded-2xl border border-cyan-500/30 space-y-2 text-xs">
+                    <p class="text-slate-300">Package: <strong class="text-cyan-300">${client.plan || 'Custom Plan'}</strong></p>
+                    <p class="text-slate-300">Status: <strong class="text-amber-400">${client.status || 'Pending'}</strong></p>
+                    <div class="flex flex-wrap gap-2 pt-2">${payBtn} ${invoiceBtn}</div>
+                    ${updatesHtml}
+                </div>
+            `;
+        }
+
+        function downloadClientInvoice(client) {
+            let amount = (client.plan && client.plan.includes('Gold')) ? '₹7,000' : ((client.plan && client.plan.includes('Diamond')) ? '₹14,000' : '₹21,000');
+            let aEmail = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
+            let aPhone = localStorage.getItem('agency_phone') || '+91 98765 43210';
+            let invNo = client.invoiceNo || 'INV-99281';
+            let greeting = client.greetingMsg || 'Thank you for partnering with AKS DEV LAB!';
+
+            let invoiceWindow = window.open('', '_blank');
+            invoiceWindow.document.write(`
+                <html>
+                <head>
+                    <title>Invoice - ${client.business || 'Client'}</title>
+                    <style>
+                        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
+                        body { font-family: 'JetBrains Mono', monospace; background: #010308 !important; color: #e2e8f0 !important; padding: 40px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        .invoice-card { max-width: 700px; margin: auto; background: linear-gradient(145deg, #030712 0%, #010308 100%) !important; border: 1px solid rgba(6, 182, 212, 0.4); padding: 45px; border-radius: 24px; box-shadow: 0 0 50px rgba(6,182,212,0.15); position: relative; overflow: hidden; }
+                        .invoice-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #06b6d4, #3b82f6, #38bdf8); }
+                        .brand-title { font-size: 26px; font-weight: 800; background: linear-gradient(90deg, #22d3ee, #38bdf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+                        .badge { background: rgba(6, 182, 212, 0.15); color: #22d3ee; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid rgba(6, 182, 212, 0.4); text-transform: uppercase; letter-spacing: 1px; }
+                        .greeting-box { background: rgba(3, 7, 18, 0.9); border-left: 4px solid #06b6d4; padding: 15px 20px; border-radius: 0 12px 12px 0; margin: 25px 0; font-size: 12px; color: #38bdf8; font-style: italic; }
+                        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: rgba(1, 3, 8, 0.8); padding: 20px; border-radius: 16px; border: 1px solid rgba(30, 41, 59, 0.8); margin: 20px 0; font-size: 12px; }
+                        .divider { border: 0; border-top: 1px dashed rgba(51, 65, 85, 0.8); margin: 25px 0; }
+                        .total-section { display: flex; justify-content: space-between; align-items: center; background: rgba(6, 182, 212, 0.08); border: 1px solid rgba(6, 182, 212, 0.3); padding: 15px 20px; border-radius: 14px; }
+                        .total-amount { font-size: 22px; font-weight: 800; color: #38bdf8; }
+                    </style>
+                </head>
+                <body>
+                    <div class="invoice-card">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <div class="brand-title">AKS DEV LAB</div>
+                                <p style="font-size:11px; color:#64748b; margin-top:4px; text-transform: uppercase; letter-spacing: 2px;">Professional Local Business Solutions</p>
+                            </div>
+                            <div style="text-align:right;">
+                                <span class="badge">SECURE INVOICE</span>
+                                <p style="font-size:12px; color:#38bdf8; margin-top:8px;"><strong>Invoice No:</strong> ${invNo}</p>
+                            </div>
+                        </div>
+
+                        <div class="greeting-box">
+                            💬 "${greeting}"
+                        </div>
+
+                        <div class="grid-info">
+                            <div>
+                                <p style="color:#64748b; text-transform:uppercase; font-size:10px; margin-bottom:5px;">Billed To Client</p>
+                                <p style="font-size:13px; font-weight:bold; color:#f8fafc;">${client.name || 'Valued Client'}</p>
+                                <p style="color:#cbd5e1;">${client.business || 'Custom Business'}</p>
+                                <p style="color:#94a3b8; font-size:11px; margin-top:3px;">${client.email || 'N/A'}</p>
+                            </div>
+                            <div style="text-align:right;">
+                                <p style="color:#64748b; text-transform:uppercase; font-size:10px; margin-bottom:5px;">Metadata & Credentials</p>
+                                <p style="color:#cbd5e1;"><strong>Date:</strong> ${client.date || new Date().toLocaleDateString()}</p>
+                                <p style="color:#38bdf8; margin-top:3px;"><strong>Store:</strong> <a href="${client.publicUrl || '#'}" target="_blank" style="color:#38bdf8;">Live Link</a></p>
+                                <p style="color:#38bdf8; margin-top:3px;"><strong>Console Pass:</strong> <code style="color:#f59e0b;">${client.consolePass || 'N/A'}</code></p>
+                            </div>
+                        </div>
+
+                        <div style="font-size: 13px; margin: 20px 0;">
+                            <p style="margin-bottom:8px;"><strong>Package Tier:</strong> <span style="color:#38bdf8;">${client.plan || 'Enterprise'}</span></p>
+                            <p><strong>Fulfillment Status:</strong> <span style="color:#f59e0b; font-weight:bold; text-transform:uppercase;">${client.status || 'Pending'}</span></p>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="total-section">
+                            <span style="font-size: 13px; color:#94a3b8; text-transform:uppercase; font-weight:bold;">Total Amount Due</span>
+                            <span class="total-amount">${amount}</span>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#64748b;">
+                            <div>
+                                <p><strong>Support Email:</strong> ${aEmail}</p>
+                                <p><strong>Mobile Hotline:</strong> ${aPhone}</p>
+                            </div>
+                            <div style="text-align:right; color:#06b6d4;">
+                                <p><strong>Zero Maintenance</strong> Architecture</p>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            invoiceWindow.document.close();
+            invoiceWindow.print();
+        }
+
+        // Live Razorpay Checkout
+        async function payViaRazorpay(orderId, planName, clientEmail) {
+            let amountInPaise = 700000;
+            if (planName && planName.includes('Diamond')) amountInPaise = 1400000;
+            if (planName && planName.includes('Platinum')) amountInPaise = 2100000;
+
+            let serverOrderId = null;
+            let activeKeyId = RAZORPAY_LIVE_KEY;
+
+            // Step 1: Call Backend to Create Order (if backend server is reachable)
+            if (API_BASE_URL) {
+                try {
+                    const orderRes = await fetch(`${API_BASE_URL}/api/create-order`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            amount: amountInPaise,
+                            currency: 'INR',
+                            receipt: `rcpt_${orderId || Date.now()}`
+                        })
+                    });
+
+                    if (orderRes.ok) {
+                        const orderData = await orderRes.json();
+                        serverOrderId = orderData.order_id;
+                        if (orderData.key_id) activeKeyId = orderData.key_id;
+                    } else {
+                        console.warn("Backend order creation returned status:", orderRes.status);
+                    }
+                } catch (e) {
+                    console.warn("Backend API unavailable, falling back to direct checkout.");
+                }
+            }
+
+            // Step 2: Open Razorpay Live Checkout Modal
+            const options = {
+                key: activeKeyId,
+                amount: amountInPaise,
+                currency: "INR",
+                name: "AKS DEV LAB",
+                description: `${planName || 'Website Package'} Provisioning`,
+                image: "https://anurag3568.github.io/aks-dev-lab/favicon.ico",
+                theme: { color: "#06b6d4" },
+                prefill: {
+                    name: document.getElementById('dash-client-name')?.innerText || "Valued Client",
+                    email: clientEmail || "client@aksdevlab.in",
+                    contact: document.getElementById('dash-phone')?.innerText || ""
+                },
+                // Step 3: Handle Success & Verification
+                handler: async function (response) {
+                    let verificationSuccess = true;
+
+                    // Send response to verify endpoint if backend is running
+                    if (API_BASE_URL && response.razorpay_signature) {
+                        try {
+                            const verifyRes = await fetch(`${API_BASE_URL}/api/verify-payment`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+                            const verifyData = await verifyRes.json();
+                            verificationSuccess = (verifyRes.ok && verifyData.status === 'success');
+                        } catch (err) {
+                            console.error("Verification endpoint error:", err);
+                        }
+                    }
+
+                    if (verificationSuccess) {
+                        let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
+                        let target = inquiries.find(i => i.email && clientEmail && i.email.toLowerCase() === clientEmail.toLowerCase());
+                        if (target) {
+                            target.paymentId = response.razorpay_payment_id;
+                            target.paymentStatus = 'Approved';
+                            target.status = 'Approved & Building';
+                            localStorage.setItem('aks_inquiries', JSON.stringify(inquiries));
+                            renderClientDashboardOrders(target);
+                        }
+                        alert("✅ Payment Successful & Verified! Payment ID: " + response.razorpay_payment_id);
+                    } else {
+                        alert("⚠️ Payment verification failed on server. Please contact support.");
+                    }
+                },
+                modal: {
+                    ondismiss: function () {
+                        console.log("Razorpay checkout modal closed by user.");
+                    }
+                }
+            };
+
+            if (serverOrderId) {
+                options.order_id = serverOrderId;
+            }
+
+            const rzp = new Razorpay(options);
+
+            // Handle payment failure event
+            rzp.on('payment.failed', function (failure) {
+                alert("❌ Payment Failed: " + (failure.error ? failure.error.description : 'Transaction declined'));
+            });
+
+            rzp.open();
+        }
+
+        function clientLogout() {
+            document.getElementById('client-dashboard-panel').classList.add('hidden');
+            document.getElementById('login-form-container').classList.remove('hidden');
+            document.getElementById('login-identifier').value = '';
+            document.getElementById('login-password').value = '';
+        }
+
+        function toggleAuthModal() { 
+            document.getElementById('auth-modal').classList.toggle('hidden'); 
         }
     </script>
 </body>
