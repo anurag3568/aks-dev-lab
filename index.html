@@ -426,31 +426,50 @@
         
         // Backend API Server Target (leave empty for standalone or set your live backend URL)
         const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:5000'
-            : '';
+    ? 'http://localhost:5000'
+    : 'https://aks-dev-lab-1.onrender.com';
 
-        function loadAgencyContactsOnIndex() {
-            let email = localStorage.getItem('agency_email') || 'support@aksdevlab.com';
-            let phone = localStorage.getItem('agency_phone') || '+91 98765 43210';
-            if(document.getElementById('support-modal-email')) document.getElementById('support-modal-email').innerText = email;
-            if(document.getElementById('support-modal-phone')) document.getElementById('support-modal-phone').innerText = phone;
+       async function loadGlobalData() {
+    // Load Contact Info dynamically
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/settings`);
+        const data = await res.json();
+        if(document.getElementById('support-modal-email')) document.getElementById('support-modal-email').innerText = data.email || 'support@aksdevlab.com';
+        if(document.getElementById('support-modal-phone')) document.getElementById('support-modal-phone').innerText = data.phone || '+91 98765 43210';
+    } catch (e) {
+        console.error('Could not load global settings');
+    }
 
-            let grid = document.getElementById('index-videos-grid');
-            if(grid) {
-                let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
-                if(customVideos.length === 0) {
-                    grid.innerHTML = `<p class="text-xs text-slate-500 text-center col-span-2 font-mono italic">No custom showcase videos published yet from the admin console.</p>`;
-                } else {
-                    grid.innerHTML = '';
-                    customVideos.forEach(vid => {
-                        let isEmbed = vid.url.includes('youtube') || vid.url.includes('embed');
-                        let mediaElement = isEmbed ? 
-                            `<iframe src="${vid.url}" class="w-full aspect-video rounded-2xl border border-cyan-500/30 shadow-lg" loading="lazy" allowfullscreen></iframe>` :
-                            `<video src="${vid.url}" preload="metadata" playsinline muted controls class="w-full h-auto rounded-2xl border border-cyan-500/30 bg-black shadow-lg" style="max-height: 450px; object-fit: contain;"></video>`;
-                        grid.innerHTML += `
-                            <div class="cyber-card p-5 rounded-3xl space-y-3 shadow-xl">
-                                <h4 class="text-white font-bold text-sm font-mono">${vid.title}</h4>
-                                ${mediaElement}
+    // Load Videos dynamically into your existing grid layout
+    let grid = document.getElementById('index-videos-grid');
+    if(grid) {
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/videos`);
+            const videos = await res.json();
+            if(!videos || videos.length === 0) {
+                grid.innerHTML = `<p class="text-xs text-slate-500 text-center col-span-2 font-mono italic">No custom showcase videos published yet.</p>`;
+            } else {
+                grid.innerHTML = '';
+                videos.forEach(vid => {
+                    let isEmbed = vid.url.includes('youtube') || vid.url.includes('embed');
+                    let mediaElement = isEmbed
+                        ? `<iframe src="${vid.url}" class="w-full aspect-video rounded-2xl border border-cyan-500/30 shadow-lg" loading="lazy" allowfullscreen></iframe>`
+                        : `<video src="${vid.url}" preload="metadata" playsinline muted controls class="w-full h-auto rounded-2xl border border-cyan-500/30 bg-black"></video>`;
+
+                    grid.innerHTML += `
+                        <div class="cyber-card p-5 rounded-3xl space-y-3 shadow-xl">
+                            <h4 class="text-white font-bold text-sm font-mono">${vid.title}</h4>
+                            ${mediaElement}
+                        </div>
+                    `;
+                });
+            }
+        } catch (err) {
+            grid.innerHTML = `<p class="text-xs text-rose-400 text-center col-span-2 font-mono italic">Error connecting to MongoDB backend storage.</p>`;
+        }
+    }
+}
+window.addEventListener('DOMContentLoaded', loadGlobalData);
                             </div>
                         `;
                     });
