@@ -394,6 +394,74 @@
             let activeEl = document.activeElement;
             if(activeEl) activeEl.blur();
         }
+    // Backend API Target
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? 'http://localhost:5000'
+        : 'https://aks-dev-lab-1.onrender.com';
+
+    // Upload Video globally to MongoDB Atlas
+    async function uploadCustomVideo() {
+        const titleEl = document.getElementById('video-title-input') || document.querySelector('input[placeholder*="title" i]');
+        const urlEl = document.getElementById('video-url-input') || document.querySelector('input[placeholder*="url" i]') || document.querySelector('input[placeholder*="link" i]');
+
+        const title = titleEl ? titleEl.value.trim() : '';
+        const url = urlEl ? urlEl.value.trim() : '';
+
+        if (!title || !url) {
+            alert('Please provide both video title and URL.');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/videos`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, url })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Video published globally! It is now visible to all users.');
+                if (titleEl) titleEl.value = '';
+                if (urlEl) urlEl.value = '';
+            } else {
+                alert('Failed to save video: ' + (data.error || 'Server error'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Unable to connect to live backend.');
+        }
+    }
+
+    // Save Contact Info globally to MongoDB Atlas
+    async function saveAgencyContacts() {
+        const emailEl = document.getElementById('agency-email-input') || document.querySelector('input[type="email"]');
+        const phoneEl = document.getElementById('agency-phone-input') || document.querySelector('input[type="tel"]');
+
+        const email = emailEl ? emailEl.value.trim() : '';
+const phone = phoneEl ? phoneEl.value.trim() : '';
+
+        if (!email || !phone) {
+            alert('Please fill out both email and phone fields.');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/settings`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, phone })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Contact details updated globally across the website!');
+            } else {
+                alert('Failed to update contact info: ' + (data.error || 'Server error'));
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Unable to connect to live backend.');
+        }
+    }
     </script>
 
     <script>
