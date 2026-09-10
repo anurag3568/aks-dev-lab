@@ -723,58 +723,42 @@ async function editVideo(videoId) {
                 await processVideoData('');
             }
         }
+async function loadAdminVideosList() {
+    let container = document.getElementById('admin-videos-list');
+    if (!container) return;
 
-        async function loadAdminVideosList() {
-            let container = document.getElementById('admin-videos-list');
-            if(!container) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/videos`);
+        const dbVideos = await res.json();
 
-            // Fetch live list from MongoDB Atlas first
-            try {
-                const res = await fetch(`${API_BASE_URL}/api/videos`);
-                const dbVideos = await res.json();
-                if (Array.isArray(dbVideos) && dbVideos.length > 0) {
-                    container.innerHTML = '';
-                    dbVideos.forEach((vid, index) => {
-                        container.innerHTML += `
-                            <div class="bg-[#030712] p-3 rounded-xl border border-cyan-500/20 flex justify-between items-center text-xs">
-                                <div>
-                                    <p class="text-white font-bold">${vid.title}</p>
-                                    <span class="text-[10px] text-cyan-400 uppercase tracking-widest truncate max-w-[200px] block">${vid.url}</span>
-                                </div>
-                                <button onclick="deleteCustomVideo('${vid._id || index}', ${index})" class="bg-rose-950 text-rose-400 px-2.5 py-1 rounded text-xs cursor-pointer">Delete</button>
-                            </div>
-                        `;
-                    });
-                    return;
-                }
-            } catch (err) {
-                console.warn('Falling back to local video cache');
-            }
-
-            // Fallback to local storage
-            let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
-            container.innerHTML = customVideos.length === 0 ? `<p class="text-xs text-slate-500 italic">No custom videos published yet.</p>` : '';
-            customVideos.forEach((vid, index) => {
+        if (Array.isArray(dbVideos) && dbVideos.length > 0) {
+            container.innerHTML = '';
+            dbVideos.forEach((vid) => {
                 container.innerHTML += `
-                    <div class="bg-[#030712] p-3 rounded-xl border border-cyan-500/20 flex justify-between items-center text-xs">
-                        <div>
-                            <p class="text-white font-bold">${vid.title}</p>
-                            <span class="text-[10px] text-cyan-400 uppercase tracking-widest">Placement: ${vid.placement || 'Gallery'}</span>
+                    <div id="video-card-${vid._id}" class="bg-[#030712] p-3 rounded-xl border border-cyan-500/20 flex justify-between items-center text-xs">
+                        <div class="overflow-hidden pr-2">
+                            <p id="video-title-${vid._id}" class="text-white font-bold truncate">${vid.title}</p>
+                            <span class="text-[10px] text-cyan-400 uppercase tracking-widest truncate max-w-[200px] block">${vid.url}</span>
                         </div>
-                        <button onclick="deleteCustomVideo('${vid.id || index}', ${index})" class="bg-rose-950 text-rose-400 px-2.5 py-1 rounded text-xs cursor-pointer">Delete</button>
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <button type="button" onclick="editVideo('${vid._id}')" class="bg-amber-950/60 hover:bg-amber-900 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded text-xs transition">
+                                ✏️ Edit
+                            </button>
+                            <button type="button" onclick="deleteVideo('${vid._id}')" class="bg-rose-950/60 hover:bg-rose-900 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded text-xs transition">
+                                🗑️ Delete
+                            </button>
+                        </div>
                     </div>
                 `;
             });
+        } else {
+            container.innerHTML = '<p class="text-xs text-slate-500 font-mono italic p-3 text-center">No active videos in MongoDB Atlas.</p>';
         }
-
-        async function deleteCustomVideo(idOrIndex, index) {
-            let customVideos = JSON.parse(localStorage.getItem('aks_custom_videos')) || [];
-            if(customVideos[index]) {
-                customVideos.splice(index, 1);
-                localStorage.setItem('aks_custom_videos', JSON.stringify(customVideos));
-            }
-            loadAdminVideosList();
-        }
+    } catch (err) {
+        console.error('Error fetching admin videos:', err);
+        container.innerHTML = '<p class="text-xs text-rose-400 font-mono italic p-3 text-center">Unable to load videos from server.</p>';
+    }
+}
 
         function toggleClientStatus(index) {
             let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
