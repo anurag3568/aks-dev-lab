@@ -1,45 +1,194 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login | AKS DEV LAB</title>
+    <title>Admin Portal Gateway | AKS DEV LAB</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        #bg-3d-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .perspective-card {
+            transform-style: preserve-3d;
+            background: linear-gradient(135deg, rgba(6, 10, 20, 0.98) 0%, rgba(2, 4, 10, 0.99) 100%);
+            border: 1px solid rgba(6, 182, 212, 0.25);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(6, 182, 212, 0.03);
+        }
+    </style>
 </head>
-<body class="bg-[#02040a] text-cyan-100 font-mono min-h-screen flex items-center justify-center p-4">
-    <div class="bg-[#060a14] border border-cyan-500/40 p-8 rounded-3xl max-w-md w-full space-y-6 shadow-[0_0_50px_rgba(6,182,212,0.2)]">
-        <div class="text-center space-y-2">
-            <div class="inline-block bg-cyan-500/10 text-cyan-400 p-3 rounded-2xl border border-cyan-500/30">
-                <i class="fa-solid fa-shield-halved text-2xl"></i>
-            </div>
-            <h1 class="text-2xl font-black text-white">Owner Portal Login</h1>
-            <p class="text-xs text-slate-400">Enter admin credentials to access console.</p>
-        </div>
-        <form onsubmit="handleAdminLogin(event)" class="space-y-4 font-sans">
-            <div>
-                <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block mb-1">Password</label>
-                <input type="password" id="admin-pass" autocomplete="off" required placeholder="Enter password (default: admin123)" class="w-full bg-[#02040a] border border-cyan-500/30 text-white px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400">
-            </div>
-            <button type="submit" class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3.5 rounded-xl text-xs transition cursor-pointer shadow-lg">
-                Authenticate & Enter Console
-            </button>
-        </form>
-        <div class="text-center pt-2">
-            <a href="index.html" class="text-xs text-slate-400 hover:text-cyan-300 transition font-sans">← Back to Storefront Index</a>
-        </div>
+<body class="bg-[#02040a] text-cyan-100 font-mono selection:bg-cyan-500 selection:text-slate-950 min-h-screen flex flex-col justify-between relative overflow-x-hidden">
+
+    <canvas id="bg-3d-canvas"></canvas>
+
+    <!-- Top Status Banner -->
+    <div class="bg-gradient-to-r from-cyan-950 via-[#02040a] to-blue-950 text-cyan-400 text-xs py-2.5 px-4 text-center font-black tracking-widest border-b border-cyan-500/40 shadow-[0_0_30px_rgba(6,182,212,0.25)] uppercase">
+        ⚡ [RESTRICTED ACCESS] AKS DEV LAB Central Master Gateway
     </div>
 
+    <!-- Main Authentication Container -->
+    <main class="flex-grow flex items-center justify-center px-4 sm:px-6 py-12 relative z-10">
+        <div class="perspective-card w-full max-w-md rounded-3xl p-8 sm:p-10 border border-cyan-500/40 shadow-2xl relative space-y-6">
+            
+            <!-- Brand & Icon Header -->
+            <div class="text-center space-y-3">
+                <div class="inline-flex bg-gradient-to-tr from-cyan-500 to-blue-600 text-slate-950 p-3.5 rounded-2xl shadow-[0_0_30px_rgba(6,182,212,0.6)] border border-cyan-300/40 mb-1">
+                    <i class="fa-solid fa-shield-halved text-2xl"></i>
+                </div>
+                <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                    AKS DEV LAB
+                </h1>
+                <p class="text-xs text-cyan-500/80 font-bold uppercase tracking-widest">
+                    Owner Terminal Authentication
+                </p>
+            </div>
+
+            <!-- Login Form -->
+            <form onsubmit="handleAdminLogin(event)" class="space-y-5">
+                <div class="space-y-1.5 text-left">
+                    <label class="text-xs font-bold text-cyan-400 uppercase tracking-wider block">Master Access Key</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="admin-password-input" 
+                            required 
+                            autocomplete="current-password"
+                            placeholder="Enter Cloud Admin Password" 
+                            class="w-full bg-[#02040a] border border-cyan-500/35 text-white px-4 py-3 rounded-xl text-sm font-mono focus:outline-none focus:border-cyan-400 shadow-inner pr-10"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="togglePasswordVisibility()" 
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-cyan-500/60 hover:text-cyan-400 text-sm focus:outline-none cursor-pointer"
+                        >
+                            <i id="toggle-icon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button 
+                    type="submit" 
+                    id="login-btn"
+                    class="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-black py-3.5 rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-[0_0_20px_rgba(6,182,212,0.4)] flex items-center justify-center gap-2"
+                >
+                    <i class="fa-solid fa-key"></i> Authenticate & Unlock
+                </button>
+            </form>
+
+            <div class="pt-2 border-t border-cyan-500/20 flex justify-between items-center text-[11px] font-sans">
+                <a href="index.html" class="text-slate-400 hover:text-cyan-400 transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-left"></i> Return to Storefront
+                </a>
+                <span class="text-cyan-500/60 font-mono">Atlas Synced</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#02040a] border-t border-cyan-500/20 py-4 text-center text-xs text-slate-500 font-sans relative z-10">
+        AKS DEV LAB Cybernetic Console • Zero Maintenance Architecture
+    </footer>
+
+    <!-- Three.js Ambient Matrix Background -->
     <script>
-        function handleAdminLogin(e) {
-            e.preventDefault();
-            let pass = document.getElementById('admin-pass').value;
-            let savedPass = localStorage.getItem('aks_admin_pass') || 'admin123';
-            if(pass === savedPass) {
-                sessionStorage.setItem('aks_logged_in', 'true');
-                window.location.href = 'admin-dashboard.html';
+        const canvas = document.getElementById('bg-3d-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        const geometry = new THREE.BufferGeometry();
+        const count = 750;
+        const positions = new Float32Array(count * 3);
+        for(let i = 0; i < count * 3; i++) { positions[i] = (Math.random() - 0.5) * 15; }
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({ size: 0.03, color: 0x06b6d4, transparent: true, opacity: 0.6 });
+        const particlesMesh = new THREE.Points(geometry, material);
+        scene.add(particlesMesh);
+        camera.position.z = 5;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particlesMesh.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+
+    <!-- Global MongoDB Atlas Authentication Handler -->
+    <script>
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5000'
+            : 'https://aks-dev-lab-1.onrender.com';
+
+        function togglePasswordVisibility() {
+            const input = document.getElementById('admin-password-input');
+            const icon = document.getElementById('toggle-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
             } else {
-                alert('❌ Incorrect Password! Default password is: admin123');
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        async function handleAdminLogin(e) {
+            e.preventDefault();
+            const input = document.getElementById('admin-password-input');
+            const submitBtn = document.getElementById('login-btn');
+            const enteredPass = input.value.trim();
+
+            if (!enteredPass) {
+                alert('Please enter your admin password.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> Verifying with Atlas...`;
+
+            try {
+                // Query live MongoDB Atlas settings from Express on Render
+                const res = await fetch(`${API_BASE_URL}/api/settings`);
+                const data = await res.json();
+                const globalPassword = data.adminPassword || 'admin123';
+
+                if (enteredPass === globalPassword) {
+                    sessionStorage.setItem('aks_logged_in', 'true');
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    alert('❌ Invalid Admin Password.');
+                    input.value = '';
+                }
+            } catch (err) {
+                console.warn('Atlas unreachable, checking local fallback:', err);
+                const fallbackPass = localStorage.getItem('aks_admin_pass') || 'admin123';
+                if (enteredPass === fallbackPass) {
+                    sessionStorage.setItem('aks_logged_in', 'true');
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    alert('❌ Invalid Admin Password.');
+                    input.value = '';
+                }
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-key"></i> Authenticate & Unlock`;
             }
         }
     </script>
