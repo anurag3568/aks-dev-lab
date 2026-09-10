@@ -587,7 +587,64 @@
             loadAdminVideosList();
         }
 
-        function clearTrafficLogs() {
+function clearTrafficLogs() {
+    localStorage.removeItem('aks_visitor_logs');
+    loadDashboardData();
+    alert('✅ Visitor traffic logs cleared successfully!');
+}
+
+// One-Click Delete Video Action
+async function deleteVideo(videoId) {
+    if (!confirm('Are you sure you want to permanently delete this video?')) return;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/videos/${videoId}`, {
+            method: 'DELETE'
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert('❌ Delete failed: ' + (data.error || res.status));
+            return;
+        }
+
+        const card = document.getElementById(`video-card-${videoId}`);
+        if (card) card.remove();
+        alert('✅ Video removed from MongoDB Atlas and Storefront.');
+    } catch (err) {
+        console.error('Delete error:', err);
+        alert('❌ Network error while deleting video.');
+    }
+}
+
+// One-Click Edit Video Title Action
+async function editVideo(videoId) {
+    const titleEl = document.getElementById(`video-title-${videoId}`);
+    const currentTitle = titleEl ? titleEl.innerText : '';
+
+    const newTitle = prompt('Enter updated title for this video:', currentTitle);
+    if (!newTitle || newTitle.trim() === '' || newTitle.trim() === currentTitle) return;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/videos/${videoId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title: newTitle.trim() })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+            alert('❌ Edit failed: ' + (data.error || res.status));
+            return;
+        }
+
+        if (titleEl) titleEl.innerText = newTitle.trim();
+        alert('✅ Video title updated successfully.');
+    } catch (err) {
+        console.error('Update error:', err);
+        alert('❌ Network error while editing video.');
+    }
+}
             localStorage.removeItem('aks_visitor_logs');
             loadDashboardData();
             alert('✅ Visitor traffic logs cleared successfully!');
