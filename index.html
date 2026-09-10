@@ -451,12 +451,10 @@
             } else {
                 grid.innerHTML = '';
                 videos.forEach(vid => {
-                    let isEmbed = vid.url.includes('youtube') || vid.url.includes('embed');
+let isEmbed = vid.url.includes('youtube') || vid.url.includes('embed');
                     let mediaElement = isEmbed
-? `<iframe src="${vid.url}" class="w-full aspect-video rounded-2xl border border-cyan-500/30 shadow-lg" loading="lazy" allowfullscreen></iframe>`
-                    : `<video src="${vid.url}" preload="metadata" playsinline muted controls class="w-full h-auto rounded-2xl border border-cyan-500/30 bg-black"></video>`;
-
-                grid.innerHTML += `
+                        ? `<iframe src="${vid.url}" class="w-full aspect-video rounded-2xl border border-cyan-500/30 shadow-lg" loading="lazy" allowfullscreen></iframe>`
+                        : `<video src="${vid.url}" preload="metadata" playsinline muted controls class="w-full h-auto rounded-2xl border border-cyan-500/30 bg-black"></video>`;                grid.innerHTML += `
                     <div class="cyber-card p-5 rounded-3xl space-y-3 shadow-xl">
                         <h4 class="text-white font-bold text-sm font-mono">${vid.title}</h4>
                         ${mediaElement}
