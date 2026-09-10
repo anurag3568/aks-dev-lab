@@ -433,8 +433,13 @@
             let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
             let visitorLogs = JSON.parse(localStorage.getItem('aks_visitor_logs')) || [];
 
-            document.getElementById('metric-total').innerText = inquiries.length;
-            document.getElementById('metric-visitors').innerText = visitorLogs.length;
+            const metricTotal = document.getElementById('metric-total');
+            const metricVisitors = document.getElementById('metric-visitors');
+            const metricRev = document.getElementById('metric-rev-total');
+            const statGold = document.getElementById('stat-gold');
+
+            if (metricTotal) metricTotal.innerText = inquiries.length;
+            if (metricVisitors) metricVisitors.innerText = visitorLogs.length;
 
             let totalRev = 0, goldCount = 0, diamondCount = 0, platinumCount = 0;
             inquiries.forEach(i => {
@@ -444,12 +449,16 @@
                     else if(i.plan && i.plan.includes('Platinum')) { totalRev += 21000; platinumCount++; }
                 }
             });
-            document.getElementById('metric-rev-total').innerText = '₹' + totalRev.toLocaleString('en-IN');
-            document.getElementById('stat-gold').innerText = `Gold: ${goldCount} | Diamond: ${diamondCount} | Platinum: ${platinumCount}`;
+
+            if (metricRev) metricRev.innerText = '₹' + totalRev.toLocaleString('en-IN');
+            if (statGold) statGold.innerText = `Gold: ${goldCount} | Diamond: ${diamondCount} | Platinum: ${platinumCount}`;
 
             // Populate Traffic Table
-            document.getElementById('traffic-total-views').innerText = visitorLogs.length;
-            document.getElementById('traffic-unique-count').innerText = visitorLogs.length;
+            const trafficTotalViews = document.getElementById('traffic-total-views');
+            const trafficUniqueCount = document.getElementById('traffic-unique-count');
+            if (trafficTotalViews) trafficTotalViews.innerText = visitorLogs.length;
+            if (trafficUniqueCount) trafficUniqueCount.innerText = visitorLogs.length;
+
             let trafficTbody = document.getElementById('traffic-table-body');
             if(trafficTbody) {
                 trafficTbody.innerHTML = visitorLogs.length === 0 ? `<tr><td colspan="3" class="py-6 text-center text-slate-500">No visitor traffic recorded yet.</td></tr>` : '';
@@ -587,70 +596,64 @@
             loadAdminVideosList();
         }
 
-function clearTrafficLogs() {
-    localStorage.removeItem('aks_visitor_logs');
-    loadDashboardData();
-    alert('✅ Visitor traffic logs cleared successfully!');
-}
-
-// One-Click Delete Video Action
-async function deleteVideo(videoId) {
-    if (!confirm('Are you sure you want to permanently delete this video?')) return;
-
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/videos/${videoId}`, {
-            method: 'DELETE'
-        });
-        const data = await res.json();
-
-        if (!res.ok) {
-            alert('❌ Delete failed: ' + (data.error || res.status));
-            return;
+        function clearTrafficLogs() {
+            localStorage.removeItem('aks_visitor_logs');
+            loadDashboardData();
+            alert('✅ Visitor traffic logs cleared successfully!');
         }
 
-        const card = document.getElementById(`video-card-${videoId}`);
-        if (card) card.remove();
-        alert('✅ Video removed from MongoDB Atlas and Storefront.');
-    } catch (err) {
-        console.error('Delete error:', err);
-        alert('❌ Network error while deleting video.');
-    }
-}
+        // One-Click Delete Video Action
+        async function deleteVideo(videoId) {
+            if (!confirm('Are you sure you want to permanently delete this video?')) return;
 
-// One-Click Edit Video Title Action
-async function editVideo(videoId) {
-    const titleEl = document.getElementById(`video-title-${videoId}`);
-    const currentTitle = titleEl ? titleEl.innerText : '';
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/videos/${videoId}`, {
+                    method: 'DELETE'
+                });
+                const data = await res.json();
 
-    const newTitle = prompt('Enter updated title for this video:', currentTitle);
-    if (!newTitle || newTitle.trim() === '' || newTitle.trim() === currentTitle) return;
+                if (!res.ok) {
+                    alert('❌ Delete failed: ' + (data.error || res.status));
+                    return;
+                }
 
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/videos/${videoId}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: newTitle.trim() })
-        });
-        const data = await res.json();
-
-        if (!res.ok) {
-            alert('❌ Edit failed: ' + (data.error || res.status));
-            return;
+                const card = document.getElementById(`video-card-${videoId}`);
+                if (card) card.remove();
+                alert('✅ Video removed from MongoDB Atlas and Storefront.');
+            } catch (err) {
+                console.error('Delete error:', err);
+                alert('❌ Network error while deleting video.');
+            }
         }
 
-        if (titleEl) titleEl.innerText = newTitle.trim();
-        alert('✅ Video title updated successfully.');
- } catch (err) {
-        console.error('Update error:', err);
-        alert('❌ Network error while editing video.');
-    }
-}
+        // One-Click Edit Video Title Action
+        async function editVideo(videoId) {
+            const titleEl = document.getElementById(`video-title-${videoId}`);
+            const currentTitle = titleEl ? titleEl.innerText : '';
 
-function clearTrafficLogs() {
-    localStorage.removeItem('aks_visitor_logs');
-    loadDashboardData();
-    alert('✅ Visitor traffic logs cleared successfully!');
-}
+            const newTitle = prompt('Enter updated title for this video:', currentTitle);
+            if (!newTitle || newTitle.trim() === '' || newTitle.trim() === currentTitle) return;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/videos/${videoId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: newTitle.trim() })
+                });
+                const data = await res.json();
+
+                if (!res.ok) {
+                    alert('❌ Edit failed: ' + (data.error || res.status));
+                    return;
+                }
+
+                if (titleEl) titleEl.innerText = newTitle.trim();
+                alert('✅ Video title updated successfully.');
+            } catch (err) {
+                console.error('Update error:', err);
+                alert('❌ Network error while editing video.');
+            }
+        }
 
         async function handleVideoUpload(e) {
             e.preventDefault();
@@ -667,7 +670,7 @@ function clearTrafficLogs() {
             let processVideoData = async (videoSrc) => {
                 const finalUrl = videoSrc || 'https://www.w3schools.com/html/mov_bbb.mp4';
                 
-               // 1. Sync directly to MongoDB Atlas
+                // 1. Sync directly to MongoDB Atlas
                 try {
                     const res = await fetch(`${API_BASE_URL}/api/videos`, {
                         method: 'POST',
@@ -725,42 +728,43 @@ function clearTrafficLogs() {
                 await processVideoData('');
             }
         }
-async function loadAdminVideosList() {
-    let container = document.getElementById('admin-videos-list');
-    if (!container) return;
 
-    try {
-        const res = await fetch(`${API_BASE_URL}/api/videos`);
-        const dbVideos = await res.json();
+        async function loadAdminVideosList() {
+            let container = document.getElementById('admin-videos-list');
+            if (!container) return;
 
-        if (Array.isArray(dbVideos) && dbVideos.length > 0) {
-            container.innerHTML = '';
-            dbVideos.forEach((vid) => {
-                container.innerHTML += `
-                    <div id="video-card-${vid._id}" class="bg-[#030712] p-3 rounded-xl border border-cyan-500/20 flex justify-between items-center text-xs">
-                        <div class="overflow-hidden pr-2">
-                            <p id="video-title-${vid._id}" class="text-white font-bold truncate">${vid.title}</p>
-                            <span class="text-[10px] text-cyan-400 uppercase tracking-widest truncate max-w-[200px] block">${vid.url}</span>
-                        </div>
-                        <div class="flex items-center space-x-2 shrink-0">
-                            <button type="button" onclick="editVideo('${vid._id}')" class="bg-amber-950/60 hover:bg-amber-900 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded text-xs transition">
-                                ✏️ Edit
-                            </button>
-                            <button type="button" onclick="deleteVideo('${vid._id}')" class="bg-rose-950/60 hover:bg-rose-900 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded text-xs transition">
-                                🗑️ Delete
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-        } else {
-            container.innerHTML = '<p class="text-xs text-slate-500 font-mono italic p-3 text-center">No active videos in MongoDB Atlas.</p>';
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/videos`);
+                const dbVideos = await res.json();
+
+                if (Array.isArray(dbVideos) && dbVideos.length > 0) {
+                    container.innerHTML = '';
+                    dbVideos.forEach((vid) => {
+                        container.innerHTML += `
+                            <div id="video-card-${vid._id}" class="bg-[#030712] p-3 rounded-xl border border-cyan-500/20 flex justify-between items-center text-xs">
+                                <div class="overflow-hidden pr-2">
+                                    <p id="video-title-${vid._id}" class="text-white font-bold truncate">${vid.title}</p>
+                                    <span class="text-[10px] text-cyan-400 uppercase tracking-widest truncate max-w-[200px] block">${vid.url}</span>
+                                </div>
+                                <div class="flex items-center space-x-2 shrink-0">
+                                    <button type="button" onclick="editVideo('${vid._id}')" class="bg-amber-950/60 hover:bg-amber-900 text-amber-400 border border-amber-500/30 px-2.5 py-1 rounded text-xs transition">
+                                        ✏️ Edit
+                                    </button>
+                                    <button type="button" onclick="deleteVideo('${vid._id}')" class="bg-rose-950/60 hover:bg-rose-900 text-rose-400 border border-rose-500/30 px-2.5 py-1 rounded text-xs transition">
+                                        🗑️ Delete
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = '<p class="text-xs text-slate-500 font-mono italic p-3 text-center">No active videos in MongoDB Atlas.</p>';
+                }
+            } catch (err) {
+                console.error('Error fetching admin videos:', err);
+                container.innerHTML = '<p class="text-xs text-rose-400 font-mono italic p-3 text-center">Unable to load videos from server.</p>';
+            }
         }
-    } catch (err) {
-        console.error('Error fetching admin videos:', err);
-        container.innerHTML = '<p class="text-xs text-rose-400 font-mono italic p-3 text-center">Unable to load videos from server.</p>';
-    }
-}
 
         function toggleClientStatus(index) {
             let inquiries = JSON.parse(localStorage.getItem('aks_inquiries')) || [];
@@ -1071,6 +1075,10 @@ async function loadAdminVideosList() {
             if(targetBtn) {
                 targetBtn.classList.remove('border-transparent', 'text-slate-400');
                 targetBtn.classList.add('border-cyan-400', 'text-cyan-300', 'bg-cyan-950/20');
+            }
+
+            if(tabName === 'videos') {
+                loadAdminVideosList();
             }
         }
 
