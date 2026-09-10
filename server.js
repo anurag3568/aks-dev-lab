@@ -32,7 +32,8 @@ const VideoSchema = new mongoose.Schema({
 const SettingsSchema = new mongoose.Schema({
     key: { type: String, unique: true, default: 'agency_settings' },
     email: { type: String, default: 'support@aksdevlab.in' },
-    phone: { type: String, default: '+91 98765 43210' }
+    phone: { type: String, default: '+91 98765 43210' },
+    adminPassword: { type: String, default: 'admin123' } // Global cloud-synced password
 });
 
 const Video = mongoose.models.Video || mongoose.model('Video', VideoSchema);
@@ -125,6 +126,32 @@ app.post('/api/settings', async (req, res) => {
     } catch (err) {
         console.error('Error updating settings:', err);
         res.status(500).json({ error: 'Failed to save agency settings' });
+    }
+});
+
+// Global Admin Password Update Route
+app.post('/api/admin/change-password', async (req, res) => {
+    try {
+        const { currentPassword, newPassword } = req.body;
+        let config = await Settings.findOne({ key: 'agency_settings' });
+
+        if (!config) {
+            config = await Settings.create({ key: 'agency_settings', adminPassword: 'admin123' });
+        }
+
+        const storedPassword = config.adminPassword || 'admin123';
+
+        if (currentPassword !== storedPassword) {
+            return res.status(400).json({ error: 'Incorrect current password' });
+        }
+
+        config.adminPassword = newPassword;
+        await config.save();
+
+        res.json({ message: 'Admin password updated globally in MongoDB Atlas' });
+    } catch (err) {
+        console.error('Password update error:', err);
+        res.status(500).json({ error: 'Failed to update global admin password' });
     }
 });
 
