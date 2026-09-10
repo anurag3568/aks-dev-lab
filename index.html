@@ -468,17 +468,14 @@
             grid.innerHTML = `<p class="text-xs text-rose-400 text-center col-span-2 font-mono italic">Error connecting to MongoDB backend storage.</p>`;
         }
     }
-}
-window.addEventListener('DOMContentLoaded', loadGlobalData);
-                            </div>
-                        `;
-                    });
-                }
+</div>
+                    `;
+                });
             }
         }
-
-        window.addEventListener('DOMContentLoaded', loadAgencyContactsOnIndex);
-        setInterval(loadAgencyContactsOnIndex, 2000);
+    }
+}
+window.addEventListener('DOMContentLoaded', loadGlobalData);
 
         function toggleSupportModal() {
             document.getElementById('support-modal').classList.toggle('hidden');
