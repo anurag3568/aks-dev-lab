@@ -644,11 +644,11 @@ async function editVideo(videoId) {
         console.error('Update error:', err);
         alert('❌ Network error while editing video.');
     }
+function clearTrafficLogs() {
+    localStorage.removeItem('aks_visitor_logs');
+    loadDashboardData();
+    alert('✅ Visitor traffic logs cleared successfully!');
 }
-            localStorage.removeItem('aks_visitor_logs');
-            loadDashboardData();
-            alert('✅ Visitor traffic logs cleared successfully!');
-        }
 
         async function handleVideoUpload(e) {
             e.preventDefault();
